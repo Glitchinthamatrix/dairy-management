@@ -109,8 +109,9 @@ async function addImageAddressToProduct(req, res, next) {
       { $set: { images: [...product.images, ...imageAddresses] } },
       { new: true }
     );
-    res.status(200).json(generalizeResult(product));
+    res.status(200).json(generalizeResult(updated));
   } catch (e) {
+    console.log("add-product-image: ", e);
     res.status(500).json({});
   }
 }
