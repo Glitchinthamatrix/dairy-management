@@ -99,12 +99,13 @@ async function verifySellerProductDirectory(req, res, next) {
 
 async function addImageAddressToProduct(req, res, next) {
   try {
+    const { productId } = req.params;
     const imageAddresses = req.files.image.map(
       (file) => `${res.locals.user.id}/${file.filename}`
     );
-    const product = await Product.findOne({ _id: req.body.productId });
+    const product = await Product.findOne({ _id: productId });
     const updated = await Product.findOneAndUpdate(
-      { _id: req.body.productId },
+      { _id: productId },
       { $set: { images: [...product.images, ...imageAddresses] } },
       { new: true }
     );

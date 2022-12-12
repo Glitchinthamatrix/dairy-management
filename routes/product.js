@@ -17,7 +17,7 @@ router
     productController.addProduct
   );
 
-router.route("/image").post(
+router.route("/:productId/image").post(
   authController.verifyUserAndPassAsResponseLocal,
   productController.verifySellerProductDirectory,
   (req, res, next) =>
@@ -34,7 +34,6 @@ router.route("/image").post(
       fileFilter(file) {
         return ["png", "jpg"].indexOf(file.mimetype.split("/")[1]) !== -1;
       },
-      requiredBodyParams: ["productId"],
     }),
   productController.addImageAddressToProduct
 );

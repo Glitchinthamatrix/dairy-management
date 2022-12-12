@@ -1,6 +1,5 @@
 import multer from "multer";
 import { ERROR_CODE_FILE_NOT_FOUND } from "../constants.js";
-import { capitalize } from "../utils/string.js";
 
 class FileUploadError extends Error {
   constructor(code, message = null) {
@@ -35,19 +34,6 @@ export const multerInstance = multer({
     try {
       // Check if required body params are present,
       // Check here, because multer only provides body params after it's initiated
-      if (req.locals.requiredBodyParams) {
-        const errors = {};
-        for (let requirement of req.locals.requiredBodyParams) {
-          if (req.body[requirement] === undefined) {
-            errors[requirement] = `${capitalize(requirement)} is required`;
-          }
-        }
-        if (Object.keys(errors).length > 0) {
-          res.status(422).json(errors);
-          return;
-        }
-      }
-
       const isValid = req.locals.fileFilter(file);
       if (!isValid) {
         cb(new FileUploadError(FILE_UPLOAD_ERROR_MALICIOUS_TYPE));
@@ -66,7 +52,6 @@ export async function upload({
   res,
   next,
   fieldName,
-  requiredBodyParams,
   fileFilter,
   destination,
   fileName,
@@ -76,7 +61,6 @@ export async function upload({
     req.locals.fileFilter = fileFilter;
     req.locals.destination = destination;
     req.locals.fileName = fileName;
-    req.locals.requiredBodyParams = requiredBodyParams;
 
     const uploadFn = multerInstance.fields([{ name: fieldName, maxCount: maxCount }]);
 
