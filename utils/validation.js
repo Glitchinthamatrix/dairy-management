@@ -61,7 +61,7 @@ export const TYPE_VALIDATORS = {
   [TYPE_MONGOOSE_ID]: MONGOOSE_ID.validator,
 };
 
-export const schemaEnforcer = async ({req, res, next, modelProperties, Model}) => {
+export const schemaEnforcer = async ({req, res, next, modelProperties, Model, belongingIds}) => {
   const errors = {};
   const modelPropertyKeys = Object.keys(modelProperties);
   const bodyProperties = Object.keys(req.body);
@@ -127,8 +127,8 @@ export const schemaEnforcer = async ({req, res, next, modelProperties, Model}) =
         modelProperties[bodyProperties[i]].unique instanceof Array &&
         modelProperties[bodyProperties[i]].unique[1]
       ) {
-        // Check if there is a validator function provided in the model definition
-        // Use the validator if provided
+        // Check if there is a validator function provided as an argument
+        // Use the validator function if provided
         // The function checks if the values being used aleady exist on database
         isTaken = await modelProperties[bodyProperties[i]].unique[1]({
           propName: bodyProperties[i],
@@ -136,7 +136,8 @@ export const schemaEnforcer = async ({req, res, next, modelProperties, Model}) =
           res: res,
         });
       } else {
-        isTaken = await Model.exists({ [bodyProperties[i]]: req.body[bodyProperties[i]] });
+        const entity = await Model.exists({ [bodyProperties[i]]: req.body[bodyProperties[i]] });
+        isTaken = belongingIds ? (belongingIds.indexOf(entity._id.toString()) === -1) : true;
       }
       if (isTaken) {
         errors[bodyProperties[i]] = `This ${capitalize(bodyProperties[i])} is already in use`;
