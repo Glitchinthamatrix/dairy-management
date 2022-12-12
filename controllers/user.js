@@ -45,7 +45,7 @@ async function addUser(req, res){
 }
 
 function getUser(req, res){
-  User.findById(req.params.id)
+  User.findById(req.params.userId)
   .then((user)=>{
     res.status(200).json(generalizeResult(user));
   })
@@ -55,7 +55,7 @@ function getUser(req, res){
 }
 
 function updateUser(req, res){
-  User.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
+  User.findOneAndUpdate({_id: req.params.userId}, {$set: req.body}, {new: true})
   .then((user, errors)=>{
     if(user){
       res.status(200).json(generalizeResult(user));
@@ -69,7 +69,7 @@ function updateUser(req, res){
 }
 
 function removeUser(req, res){
-  User.deleteOne({id: req.params.id})
+  User.deleteOne({id: req.params.userId})
   .then((resp)=>{
     res.status(200).json({deletedCount:resp.deletedCount});
   })

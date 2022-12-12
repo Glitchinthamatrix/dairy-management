@@ -17,7 +17,7 @@ function addReview(req, res){
 }
 
 function getReview(req, res){
-  Review.findById(req.params.id)
+  Review.findById(req.params.reviewId)
   .then((review)=>{
     res.status(200).json(generalizeResult(review));
   })
@@ -27,7 +27,7 @@ function getReview(req, res){
 }
 
 function updateReview(req, res){
-  Review.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
+  Review.findOneAndUpdate({_id: req.params.reviewId}, {$set: req.body}, {new: true})
   .then((review, errors)=>{
     if(review){
       res.status(200).json(generalizeResult(review));
@@ -41,7 +41,7 @@ function updateReview(req, res){
 }
 
 function removeReview(req, res){
-  Review.deleteOne({id: req.params.id})
+  Review.deleteOne({id: req.params.reviewId})
   .then((resp)=>{
     res.status(200).json({deletedCount: resp.deletedCount});
   })

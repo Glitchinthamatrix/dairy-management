@@ -13,7 +13,7 @@ router.route("/")
 router.route("/me")
 .get(userController.getSelf)
 
-router.route("/:id")
+router.route("/:userId")
 .get(userController.getUser)
 .put(userSchemaEnforcer, userController.updateUser)
 .delete(userController.removeUser)

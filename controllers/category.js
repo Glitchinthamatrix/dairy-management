@@ -23,11 +23,11 @@ function addCategory(req, res) {
 }
 
 function removeCategory(req, res) {
-    if(!req.params.id){
+    if(!req.params.categoryId){
         res.status(422).json({id: "Category-ID is required"});
         return;
     }
-    Category.delete({id: req.params.id})
+    Category.delete({id: req.params.categoryId})
     .then((_)=>{
         res.status(200).json({});
     })

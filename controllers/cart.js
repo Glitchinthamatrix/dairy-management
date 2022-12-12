@@ -28,7 +28,7 @@ function addCart(req, res){
 }
 
 function getCart(req, res){
-  Cart.findById(req.params.id)
+  Cart.findById(req.params.cartId)
   .then((cart)=>{
     res.status(200).json(generalizeResult(cart));
   })
@@ -38,7 +38,7 @@ function getCart(req, res){
 }
 
 function updateCart(req, res){
-  Cart.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
+  Cart.findOneAndUpdate({_id: req.params.cartId}, {$set: req.body}, {new: true})
   .then((cart, errors)=>{
     if(cart){
       res.status(200).json(generalizeResult(cart));

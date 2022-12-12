@@ -8,7 +8,7 @@ const { reviewSchemaEnforcer } = schemaEnforcers;
 router.route("/")
 .post(reviewSchemaEnforcer, reviewController.addReview)
 
-router.route("/:id")
+router.route("/:reviewId")
 .get(reviewController.getReview)
 .put(reviewSchemaEnforcer, reviewController.updateReview)
 .delete(reviewController.removeReview)

@@ -9,7 +9,7 @@ router.route("/")
 .get(cartController.getCarts)
 .post(cartSchemaEnforcer, cartController.addCart)
 
-router.route("/:id")
+router.route("/:cartId")
 .get(cartController.getCart)
 .put(cartSchemaEnforcer, cartController.updateCart)
 

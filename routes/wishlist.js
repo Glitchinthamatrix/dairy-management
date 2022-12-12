@@ -9,7 +9,7 @@ router.route("/")
 .get(wishlistController.getWishlists)
 .post(wishlistSchemaEnforcer, wishlistController.addWishlist)
 
-router.route("/:id")
+router.route("/:wishlistId")
 .get(wishlistController.getWishlist)
 .put(wishlistSchemaEnforcer, wishlistController.updateWishlist)
 .delete(wishlistController.removeWishlist)

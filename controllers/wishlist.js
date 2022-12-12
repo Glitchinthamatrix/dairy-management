@@ -27,7 +27,7 @@ function addWishlist(req, res){
 }
 
 function getWishlist(req, res){
-  Wishlist.findById(req.params.id)
+  Wishlist.findById(req.params.wishlistId)
   .then((wishlist)=>{
     res.status(200).json(generalizeResult(wishlist));
   })
@@ -37,7 +37,7 @@ function getWishlist(req, res){
 }
 
 function updateWishlist(req, res){
-  Wishlist.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
+  Wishlist.findOneAndUpdate({_id: req.params.wishlistId}, {$set: req.body}, {new: true})
   .then((wishlist, errors)=>{
     if(wishlist){
       res.status(200).json(generalizeResult(wishlist));
@@ -51,7 +51,7 @@ function updateWishlist(req, res){
 }
 
 function removeWishlist(req, res){
-  Wishlist.deleteOne({id: req.params.id})
+  Wishlist.deleteOne({id: req.params.wishlistId})
   .then((resp)=>{
     res.status(200).json({deleteCount: resp.deletedCount});
   })

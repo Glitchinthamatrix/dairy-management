@@ -9,7 +9,7 @@ router.route("/")
 .get(authController.verifyUserAndPassAsResponseLocal, brandController.getBrands)
 .post(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandSchemaEnforcer, brandController.addBrand)
 
-router.route("/:id")
+router.route("/:brandId")
 .get(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandController.getBrand)
 .delete(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandController.removeBrand)
 

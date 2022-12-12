@@ -43,7 +43,7 @@ router.route("/:productId/images").post(
 );
 
 router
-  .route("/:id")
+  .route("/:productId")
   .get(authController.verifyUserAndPassAsResponseLocal, productController.getProduct)
   .put(
     authController.verifyUserAndPassAsResponseLocal,

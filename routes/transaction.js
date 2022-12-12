@@ -6,7 +6,7 @@ const { transactionController } = controllers;
 router.route("/")
 .get(transactionController.getTransactions)
 
-router.route("/:id")
+router.route("/:transactionId")
 .get(transactionController.getTransaction)
 
 export default router;

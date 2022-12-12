@@ -13,7 +13,7 @@ function getTransactions(req, res){
 }
 
 function getTransaction(req, res){
-  Transaction.findById(req.params.id)
+  Transaction.findById(req.params.transactionId)
   .then((transaction)=>{
     res.status(200).json(generalizeResult(transaction));
   })

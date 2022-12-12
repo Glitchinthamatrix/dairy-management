@@ -24,7 +24,7 @@ async function getBrands(_, res){
 }
 
 async function getBrand(req, res, next) {
-    const brandId = req.params.id;
+    const brandId = req.params.brandId;
 
     const user = res.locals.user;
     const isAnAdmin = user.isAnAdmin;
@@ -62,7 +62,7 @@ async function removeBrand(req, res) {
     try{
         const user = res.locals.user;
         const seller = await User.findOne({email: user.email});
-        await Brand.deleteOne({_id: req.params.id, addedBy: user.id});
+        await Brand.deleteOne({_id: req.params.brandId, addedBy: user.id});
         res.status(200).json({});
     }catch(e) {
         res.status(500).json({});

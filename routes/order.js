@@ -8,7 +8,7 @@ const { orderSchemaEnforcer } = schemaEnforcers;
 router.route("/")
 .get(orderController.getOrders)
 
-router.route("/:id")
+router.route("/:orderId")
 .get(orderController.getOrder)
 .put(orderSchemaEnforcer, orderController.updateOrder)
 
