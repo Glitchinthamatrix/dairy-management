@@ -67,15 +67,21 @@ async function updateProduct(req, res) {
   }
 }
 
-async function removeProduct(req, res) {
+async function removeProduct(req, res, next) {
   try {
     const product = await Product.findOne({ id: req.params.id });
     const user = res.locals.user;
+    if(product === null){
+      res.status(404).json({});
+      return;
+    }
+
     if (user.isACustomer || product.addedBy.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;
     }
-    await Product.deleteOne({ id: req.params.id });
+    const result = await Product.deleteOne({ id: req.params.id });
+    res.status(200).json(result);
   } catch (e) {
     res.status(500).json({});
   }
