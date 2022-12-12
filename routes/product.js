@@ -17,7 +17,11 @@ router
     productController.addProduct
   );
 
-router.route("/:productId/image").post(
+router
+  .route("/:productId/images/:sellerId/:imageName")
+  .delete(productController.removeProductImage);
+
+router.route("/:productId/images").post(
   authController.verifyUserAndPassAsResponseLocal,
   productController.verifySellerProductDirectory,
   (req, res, next) =>
@@ -37,8 +41,6 @@ router.route("/:productId/image").post(
     }),
   productController.addImageAddressToProduct
 );
-
-router.route("/image/:sellerId/:imageName").delete(productController.removeProductImage);
 
 router
   .route("/:id")

@@ -109,20 +109,25 @@ async function addImageAddressToProduct(req, res, next) {
       { $set: { images: [...product.images, ...imageAddresses] } },
       { new: true }
     );
-    console.log("updated: ", updated);
     res.status(200).json(updated);
   } catch (e) {
-    console.log(e);
     res.status(500).json({});
   }
 }
 
 async function removeProductImage(req, res, next) {
   try {
-    const { sellerId, imageName } = req.params;
-    await fs.unlink(
-      path.join(process.cwd(), "..", "uploads", "products", sellerId, imageName)
+    const { productId, sellerId, imageName } = req.params;
+    const product = await Product.findOne({ _id: productId });
+    await fs.unlink(path.join(process.cwd(), "uploads", "products", sellerId, imageName));
+    const deletedImage = `${sellerId}/${imageName}`;
+    const updatedImages = product.images.filter((image) => image !== deletedImage);
+    const updated = await Product.findOneAndUpdate(
+      { _id: productId },
+      { $set: { images: updatedImages } },
+      { new: true }
     );
+    res.status(200).json(updated);
   } catch (e) {
     if (e.code === ERROR_CODE_FILE_NOT_FOUND) {
       res.status(404).json({});
