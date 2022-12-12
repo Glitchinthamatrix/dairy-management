@@ -105,7 +105,8 @@ async function addImageAddressToProduct(req, res, next) {
     const product = await Product.findOne({ _id: req.body.productId });
     const updated = await Product.findOneAndUpdate(
       { _id: req.body.productId },
-      { $set: { images: [...product.images, ...imageAddresses] } }
+      { $set: { images: [...product.images, ...imageAddresses] } },
+      { new: true }
     );
     console.log("updated: ", updated);
     res.status(200).json(updated);
