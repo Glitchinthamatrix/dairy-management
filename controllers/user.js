@@ -55,7 +55,7 @@ function getUser(req, res){
 }
 
 function updateUser(req, res){
-  User.findOneAndUpdate({id: req.params.id}, {$set: req.body}, {new: true})
+  User.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
   .then((user, errors)=>{
     if(user){
       res.status(200).json(generalizeResult(user));

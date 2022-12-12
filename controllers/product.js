@@ -57,7 +57,7 @@ async function updateProduct(req, res) {
       return;
     }
     const updated = await Product.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       { $set: req.body },
       { new: true }
     );

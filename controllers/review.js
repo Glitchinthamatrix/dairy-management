@@ -27,7 +27,7 @@ function getReview(req, res){
 }
 
 function updateReview(req, res){
-  Review.findOneAndUpdate({id: req.params.id}, {$set: req.body}, {new: true})
+  Review.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
   .then((review, errors)=>{
     if(review){
       res.status(200).json(generalizeResult(review));

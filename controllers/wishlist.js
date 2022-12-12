@@ -37,7 +37,7 @@ function getWishlist(req, res){
 }
 
 function updateWishlist(req, res){
-  Wishlist.findOneAndUpdate({id: req.params.id}, {$set: req.body}, {new: true})
+  Wishlist.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
   .then((wishlist, errors)=>{
     if(wishlist){
       res.status(200).json(generalizeResult(wishlist));

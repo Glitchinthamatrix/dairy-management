@@ -38,7 +38,7 @@ function getCart(req, res){
 }
 
 function updateCart(req, res){
-  Cart.findOneAndUpdate({id: req.params.id}, {$set: req.body}, {new: true})
+  Cart.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
   .then((cart, errors)=>{
     if(cart){
       res.status(200).json(generalizeResult(cart));

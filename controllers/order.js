@@ -36,7 +36,7 @@ function getOrder(req, res){
 }
 
 function updateOrder(req, res){
-  Order.findOneAndUpdate({id: req.params.id}, {$set: req.body}, {new: true})
+  Order.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true})
   .then((order, errors)=>{
     if(order){
       res.status(200).json(generalizeResult(order));
