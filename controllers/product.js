@@ -10,9 +10,9 @@ async function getProducts(req, res) {
     let products = [];
     const user = res.locals.user;
     if (user.isAnAdmin || user.isACustomer) {
-      products = await Product.find().populate("category");
+      products = await Product.find().populate(["category", "brand"]);
     } else {
-      products = await Product.find({ addedBy: user.id }).populate("category");
+      products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
     }
     res.status(200).json(generalizeResult(products));
   } catch (e) {
@@ -32,7 +32,7 @@ async function addProduct(req, res) {
 async function getProduct(req, res) {
   try {
     const user = res.locals.user;
-    let product = await Product.findOne({ _id: req.params.id }).populate("category");
+    let product = await Product.findOne({ _id: req.params.id }).populate(["category", "brand"]);
     if (product === null) {
       res.status(404).json({});
       return;
