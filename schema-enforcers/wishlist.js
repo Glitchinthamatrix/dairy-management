@@ -8,5 +8,5 @@ const properties = {
 }
 
 export default async( req, res, next) => {
-  return schemaEnforcer(req, res, next, properties, Wishlist);
+  return schemaEnforcer({req: req, res: res, next: next, modelProperties: properties, Model: Wishlist});
 }

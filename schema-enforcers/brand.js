@@ -13,5 +13,5 @@ const properties = {
 }
 
 export default async( req, res, next) => {
-  return schemaEnforcer(req, res, next, properties, Brand);
+  return schemaEnforcer({req: req, res: res, next: next, modelProperties: properties, Model: Brand});
 }

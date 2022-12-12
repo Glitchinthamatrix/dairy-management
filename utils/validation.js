@@ -61,7 +61,7 @@ export const TYPE_VALIDATORS = {
   [TYPE_MONGOOSE_ID]: MONGOOSE_ID.validator,
 };
 
-export const schemaEnforcer = async (req, res, next, modelProperties, Model) => {
+export const schemaEnforcer = async ({req, res, next, modelProperties, Model}) => {
   const errors = {};
   const modelPropertyKeys = Object.keys(modelProperties);
   const bodyProperties = Object.keys(req.body);
