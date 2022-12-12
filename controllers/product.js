@@ -109,7 +109,7 @@ async function addImageAddressToProduct(req, res, next) {
       { $set: { images: [...product.images, ...imageAddresses] } },
       { new: true }
     );
-    res.status(200).json(updated);
+    res.status(200).json(generalizeResult(product));
   } catch (e) {
     res.status(500).json({});
   }
@@ -127,7 +127,7 @@ async function removeProductImage(req, res, next) {
       { $set: { images: updatedImages } },
       { new: true }
     );
-    res.status(200).json(updated);
+    res.status(200).json(generalizeResult(updated));
   } catch (e) {
     if (e.code === ERROR_CODE_FILE_NOT_FOUND) {
       res.status(404).json({});
