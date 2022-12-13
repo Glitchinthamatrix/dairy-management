@@ -51,7 +51,7 @@ async function getProduct(req, res) {
 
 async function updateProduct(req, res) {
   try {
-    const product = await Product.findOne({ id: req.params.productId });
+    const product = await Product.findOne({ _id: req.params.productId });
     if (product.addedBy.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;
@@ -69,7 +69,7 @@ async function updateProduct(req, res) {
 
 async function removeProduct(req, res, next) {
   try {
-    const product = await Product.findOne({ id: req.params.productId });
+    const product = await Product.findOne({ _id: req.params.productId });
     const user = res.locals.user;
     if(product === null){
       res.status(404).json({});
@@ -80,7 +80,7 @@ async function removeProduct(req, res, next) {
       res.status(401).json({});
       return;
     }
-    const result = await Product.deleteOne({ id: req.params.productId });
+    const result = await Product.deleteOne({ _id: req.params.productId });
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({});
