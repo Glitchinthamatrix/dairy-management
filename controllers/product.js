@@ -10,7 +10,7 @@ async function getProducts(req, res) {
   try {
     let products = [];
     const user = res.locals.user;
-    if (user.isAnAdmin || user.isACustomer) {
+    if (!user.isASeller) {
       products = await Product.find().populate(["category", "brand", "addedBy"]);
     } else {
       products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
