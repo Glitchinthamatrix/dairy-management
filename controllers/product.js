@@ -3,6 +3,7 @@ import models from "../models/_models.js";
 import fs from "fs/promises";
 import path from "path";
 import { ERROR_CODE_FILE_NOT_FOUND } from "../constants.js";
+import { filterObject } from "../utils/object.js";
 const { Product } = models;
 
 async function getProducts(req, res) {
@@ -10,11 +11,18 @@ async function getProducts(req, res) {
     let products = [];
     const user = res.locals.user;
     if (user.isAnAdmin || user.isACustomer) {
-      products = await Product.find().populate(["category", "brand"]);
+      products = await Product.find().populate(["category", "brand", "addedBy"]);
     } else {
       products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
     }
-    res.status(200).json(generalizeResult(products));
+    products = generalizeResult(products);
+    const mapSellerValues = {
+      "name": "name",
+      "id": "id",
+      "email": "email"
+    }
+    products.forEach((product) => product.addedBy = filterObject(product.addedBy, mapSellerValues));
+    res.status(200).json(products);
   } catch (e) {
     res.status(500).json({});
   }
