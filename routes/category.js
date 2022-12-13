@@ -10,6 +10,6 @@ router
   .get(categoryController.getCategories)
   .post(categorySchemaEnforcer, categoryController.addCategory);
 
-router.route("/").delete(categoryController.removeCategory);
+router.route("/:categoryId").delete(categoryController.removeCategory);
 
 export default router;

@@ -22,14 +22,13 @@ function addCategory(req, res) {
     });
 }
 
-function removeCategory(req, res) {
-  Category.delete({ id: req.params.categoryId })
-    .then((_) => {
-      res.status(200).json({});
-    })
-    .catch((_) => {
-      res.status(500).json({});
-    });
+async function removeCategory(req, res) {
+  try{
+    const result = await Category.deleteOne({_id: req.params.categoryId});
+    res.status(200).json(result);
+  }catch(e) {
+    res.status(500).json({});
+  }
 }
 
 export default { getCategories, addCategory, removeCategory };
