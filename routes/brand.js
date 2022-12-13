@@ -11,6 +11,7 @@ router.route("/")
 
 router.route("/:brandId")
 .get(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandController.getBrand)
+.put(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandController.updateBrand)
 .delete(authController.verifyUserAndPassAsResponseLocal, authController.verifySellerFromResponseLocals, brandController.removeBrand)
 
 export default router;
