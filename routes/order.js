@@ -5,11 +5,11 @@ import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
 const { orderController } = controllers;
 const { orderSchemaEnforcer } = schemaEnforcers;
 
-router.route("/")
-.get(orderController.getOrders)
+router.route("/").get(orderController.getOrders);
 
-router.route("/:orderId")
-.get(orderController.getOrder)
-.put(orderSchemaEnforcer, orderController.updateOrder)
+router
+  .route("/:orderId")
+  .get(orderController.getOrder)
+  .put(orderSchemaEnforcer, orderController.updateOrder);
 
 export default router;

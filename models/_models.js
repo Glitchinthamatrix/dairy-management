@@ -8,4 +8,4 @@ import Transaction from "./transaction.js";
 import User from "./user.js";
 import Wishlist from "./wishlist.js";
 
-export default {Brand, Cart, Category, Order, Product, Review, Transaction, User, Wishlist};
+export default { Brand, Cart, Category, Order, Product, Review, Transaction, User, Wishlist };

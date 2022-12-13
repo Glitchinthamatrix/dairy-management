@@ -2,34 +2,34 @@ import { generalizeResult } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Category } = models;
 
-function getCategories(_, res){
-    Category.find()
-    .then((categories)=>{
-        res.status(200).json(generalizeResult(categories));
+function getCategories(_, res) {
+  Category.find()
+    .then((categories) => {
+      res.status(200).json(generalizeResult(categories));
     })
-    .catch((e)=>{
+    .catch((e) => {
       res.status(500).json({});
-    })
+    });
 }
 
 function addCategory(req, res) {
-    Category.create({name: req.body.name})
-    .then((category)=>{
-        res.status(200).json(generalizeResult(category));
+  Category.create({ name: req.body.name })
+    .then((category) => {
+      res.status(200).json(generalizeResult(category));
     })
-    .catch((_)=>{
-        res.status(500)({});
-    })
+    .catch((_) => {
+      res.status(500)({});
+    });
 }
 
 function removeCategory(req, res) {
-    Category.delete({id: req.params.categoryId})
-    .then((_)=>{
-        res.status(200).json({});
+  Category.delete({ id: req.params.categoryId })
+    .then((_) => {
+      res.status(200).json({});
     })
-    .catch((_)=>{
-        res.status(500).json({})
-    })
+    .catch((_) => {
+      res.status(500).json({});
+    });
 }
 
-export default {getCategories, addCategory, removeCategory};
+export default { getCategories, addCategory, removeCategory };

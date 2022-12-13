@@ -17,11 +17,13 @@ async function getProducts(req, res) {
     }
     products = generalizeResult(products);
     const mapSellerValues = {
-      "name": "name",
-      "id": "id",
-      "email": "email"
-    }
-    products.forEach((product) => product.addedBy = filterObject(product.addedBy, mapSellerValues));
+      name: "name",
+      id: "id",
+      email: "email",
+    };
+    products.forEach(
+      (product) => (product.addedBy = filterObject(product.addedBy, mapSellerValues))
+    );
     res.status(200).json(products);
   } catch (e) {
     res.status(500).json({});
@@ -40,7 +42,10 @@ async function addProduct(req, res) {
 async function getProduct(req, res) {
   try {
     const user = res.locals.user;
-    let product = await Product.findOne({ _id: req.params.productId }).populate(["category", "brand"]);
+    let product = await Product.findOne({ _id: req.params.productId }).populate([
+      "category",
+      "brand",
+    ]);
     if (product === null) {
       res.status(404).json({});
       return;
@@ -79,11 +84,11 @@ async function removeProduct(req, res, next) {
   try {
     const product = await Product.findOne({ _id: req.params.productId });
     const user = res.locals.user;
-    if(product === null){
+    if (product === null) {
       res.status(404).json({});
       return;
     }
-    
+
     if (!user.isAnAdmin && product.addedBy.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;

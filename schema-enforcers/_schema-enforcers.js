@@ -7,4 +7,13 @@ import reviewSchemaEnforcer from "./review.js";
 import userSchemaEnforcer from "./user.js";
 import wishlistSchemaEnforcer from "./wishlist.js";
 
-export default {brandSchemaEnforcer, cartSchemaEnforcer, categorySchemaEnforcer, orderSchemaEnforcer, productSchemaEnforcer, reviewSchemaEnforcer, userSchemaEnforcer, wishlistSchemaEnforcer}
+export default {
+  brandSchemaEnforcer,
+  cartSchemaEnforcer,
+  categorySchemaEnforcer,
+  orderSchemaEnforcer,
+  productSchemaEnforcer,
+  reviewSchemaEnforcer,
+  userSchemaEnforcer,
+  wishlistSchemaEnforcer,
+};

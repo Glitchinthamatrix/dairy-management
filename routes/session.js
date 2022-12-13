@@ -5,9 +5,9 @@ const { sessionController } = controllers;
 
 const router = express.Router();
 
-
-router.route("/")
-.post(controllerUtils.verifyLoginInfo, sessionController.sessionCreationMiddleware)
-.delete(sessionController.sessionDeletionMiddleware)
+router
+  .route("/")
+  .post(controllerUtils.verifyLoginInfo, sessionController.sessionCreationMiddleware)
+  .delete(sessionController.sessionDeletionMiddleware);
 
 export default router;

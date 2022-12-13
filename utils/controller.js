@@ -1,8 +1,5 @@
 import models from "../models/_models.js";
-import {
-  emailRegex, HUMAN_TYPE_NAMES, STRING,
-  TYPE_VALIDATORS
-} from "./validation.js";
+import { emailRegex, HUMAN_TYPE_NAMES, STRING, TYPE_VALIDATORS } from "./validation.js";
 import { capitalize } from "./string.js";
 const { User } = models;
 

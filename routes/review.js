@@ -5,12 +5,12 @@ import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
 const { reviewController } = controllers;
 const { reviewSchemaEnforcer } = schemaEnforcers;
 
-router.route("/")
-.post(reviewSchemaEnforcer, reviewController.addReview)
+router.route("/").post(reviewSchemaEnforcer, reviewController.addReview);
 
-router.route("/:reviewId")
-.get(reviewController.getReview)
-.put(reviewSchemaEnforcer, reviewController.updateReview)
-.delete(reviewController.removeReview)
+router
+  .route("/:reviewId")
+  .get(reviewController.getReview)
+  .put(reviewSchemaEnforcer, reviewController.updateReview)
+  .delete(reviewController.removeReview);
 
 export default router;

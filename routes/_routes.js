@@ -11,4 +11,17 @@ import transactionRouter from "./transaction.js";
 import userRouter from "./user.js";
 import wishlistRouter from "./wishlist.js";
 
-export default { assetRouter, authRouter, brandRouter, cartRouter, categoryRouter, orderRouter, productRouter, reviewRouter, sessionRouter, transactionRouter, userRouter, wishlistRouter }
+export default {
+  assetRouter,
+  authRouter,
+  brandRouter,
+  cartRouter,
+  categoryRouter,
+  orderRouter,
+  productRouter,
+  reviewRouter,
+  sessionRouter,
+  transactionRouter,
+  userRouter,
+  wishlistRouter,
+};

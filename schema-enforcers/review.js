@@ -3,10 +3,16 @@ import { STRING, MONGOOSE_ID, schemaEnforcer } from "../utils/validation.js";
 const { Review } = models;
 
 const properties = {
-  author: {type: MONGOOSE_ID.type, required: true },
-  comment: {type: STRING.type, required: true }
-}
+  author: { type: MONGOOSE_ID.type, required: true },
+  comment: { type: STRING.type, required: true },
+};
 
-export default async( req, res, next) => {
-  return schemaEnforcer({req: req, res: res, next: next, modelProperties: properties, Model: Review});
-}
+export default async (req, res, next) => {
+  return schemaEnforcer({
+    req: req,
+    res: res,
+    next: next,
+    modelProperties: properties,
+    Model: Review,
+  });
+};

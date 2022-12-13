@@ -61,7 +61,14 @@ export const TYPE_VALIDATORS = {
   [TYPE_MONGOOSE_ID]: MONGOOSE_ID.validator,
 };
 
-export const schemaEnforcer = async ({req, res, next, modelProperties, Model, belongingIds}) => {
+export const schemaEnforcer = async ({
+  req,
+  res,
+  next,
+  modelProperties,
+  Model,
+  belongingIds,
+}) => {
   const errors = {};
   const modelPropertyKeys = Object.keys(modelProperties);
   const bodyProperties = Object.keys(req.body);
@@ -87,7 +94,7 @@ export const schemaEnforcer = async ({req, res, next, modelProperties, Model, be
   // Check for invalid values, transform if needed and match pattern if given any
   bodyProperties.forEach((prop) => {
     if (errors[prop] === undefined) {
-      if(req.body[prop] === null){
+      if (req.body[prop] === null) {
         delete req.body[prop];
         return;
       }
@@ -136,11 +143,13 @@ export const schemaEnforcer = async ({req, res, next, modelProperties, Model, be
           res: res,
         });
       } else {
-        const entity = await Model.exists({ [bodyProperties[i]]: req.body[bodyProperties[i]] });
-        if(entity === null){
+        const entity = await Model.exists({
+          [bodyProperties[i]]: req.body[bodyProperties[i]],
+        });
+        if (entity === null) {
           isTaken = false;
-        }else{
-          isTaken = belongingIds ? (belongingIds.indexOf(entity._id.toString()) === -1) : true;
+        } else {
+          isTaken = belongingIds ? belongingIds.indexOf(entity._id.toString()) === -1 : true;
         }
       }
       if (isTaken) {
