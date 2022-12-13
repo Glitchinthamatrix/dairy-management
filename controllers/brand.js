@@ -32,9 +32,9 @@ async function getBrand(req, res, next) {
     try{
         let brand = null;
         if(isAnAdmin){
-            brand = await Brand.findone({id: brandId});
+            brand = await Brand.findOne({id: brandId});
         }else{
-            brand = Brand.findOne({id: brandId, addedBy: user.id});
+            brand = await Brand.findOne({id: brandId, addedBy: user.id});
         }
         if(brand){
             res.status(200).json(generalizeResult(brand));
@@ -42,6 +42,7 @@ async function getBrand(req, res, next) {
             res.status(404).json({});
         }
     }catch(e) {
+        console.log(e);
         res.status(500).json({});
     }
 }
