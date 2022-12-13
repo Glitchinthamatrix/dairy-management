@@ -76,10 +76,11 @@ async function removeProduct(req, res, next) {
       return;
     }
 
-    if (user.isACustomer || product.addedBy.toString() !== res.locals.user.id) {
+    if (!user.isAnAdmin || product.addedBy.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;
     }
+    
     const result = await Product.deleteOne({ _id: req.params.productId });
     res.status(200).json(result);
   } catch (e) {
