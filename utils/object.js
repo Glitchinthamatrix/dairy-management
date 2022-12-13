@@ -46,3 +46,11 @@ export function nullifyFalsyValues(obj) {
     }
   }
 }
+
+export function filterObject(obj, map) {
+  const result = {};
+  for (let field in map) {
+    result[field] = getFieldValue(obj, field);
+  }
+  return result;
+}
