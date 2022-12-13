@@ -137,7 +137,11 @@ export const schemaEnforcer = async ({req, res, next, modelProperties, Model, be
         });
       } else {
         const entity = await Model.exists({ [bodyProperties[i]]: req.body[bodyProperties[i]] });
-        isTaken = belongingIds ? (belongingIds.indexOf(entity._id.toString()) === -1) : true;
+        if(entity === null){
+          isTaken = false;
+        }else{
+          isTaken = belongingIds ? (belongingIds.indexOf(entity._id.toString()) === -1) : true;
+        }
       }
       if (isTaken) {
         errors[bodyProperties[i]] = `This ${capitalize(bodyProperties[i])} is already in use`;
