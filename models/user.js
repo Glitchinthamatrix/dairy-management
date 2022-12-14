@@ -7,8 +7,6 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Email is required"],
     unique: [true, "This email is already taken"],
-    lowercase: true,
-    match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "This email is invalid"],
   },
   password: { type: String, required: [true, "Password is required"] },
   isASeller: { type: Boolean, default: false },

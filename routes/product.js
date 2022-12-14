@@ -13,7 +13,6 @@ router
   .post(
     authController.verifyUserAndPassAsResponseLocal,
     authController.verifySellerFromResponseLocals,
-    productSchemaEnforcer,
     productController.addProduct
   );
 

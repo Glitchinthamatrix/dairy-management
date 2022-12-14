@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-  title: { type: String },
+  title: { type: String, required: [true, "Title is required"] },
   description: { type: String, default: null },
-  brand: { type: Schema.Types.ObjectId, ref: "Brand" },
-  price: { type: Number },
+  brand: { type: Schema.Types.ObjectId, ref: "Brand", default: "63997b643955a913e2a9684a" },
+  price: { type: Number, required: [true, "Price is required"] },
   category: {
     type: Schema.Types.ObjectId,
     ref: "Category",
