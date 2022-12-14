@@ -19,6 +19,9 @@ function convertNestedMongooseDocumentsToObjects(document) {
 }
 
 export function generalizeResult(result) {
+  if(result === null || result === undefined){
+    return result;
+  }
   if (Array.isArray(result)) {
     result = result.map((item) => item.toObject());
     for (let item of result) {
