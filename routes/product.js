@@ -36,7 +36,7 @@ router.route("/:productId/images").post(
       },
       fieldName: "image",
       fileFilter(file) {
-        return ["png", "jpg"].indexOf(file.mimetype.split("/")[1]) !== -1;
+        return ["png", "jpg", "jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
       },
     }),
   productController.addImageAddressToProduct
