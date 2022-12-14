@@ -12,7 +12,7 @@ function convertNestedMongooseDocumentsToObjects(document) {
         convertNestedMongooseDocumentsToObjects(document[key]);
       }
     }
-    document.id = document._id;
+    document.id = document._id.toString();
     delete document.__v;
     delete document._id;
   }
