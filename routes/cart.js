@@ -13,6 +13,7 @@ router
 router
   .route("/:cartId")
   .get(cartController.getCart)
-  .put(cartSchemaEnforcer, cartController.updateCart);
+  .put(cartController.addProductToCart)
+  .delete(cartController.removeProductFromCart)
 
 export default router;
