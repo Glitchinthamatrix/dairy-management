@@ -23,10 +23,10 @@ function addCategory(req, res) {
 }
 
 async function removeCategory(req, res) {
-  try{
-    const result = await Category.deleteOne({_id: req.params.categoryId});
+  try {
+    const result = await Category.deleteOne({ _id: req.params.categoryId });
     res.status(200).json(result);
-  }catch(e) {
+  } catch (e) {
     res.status(500).json({});
   }
 }
