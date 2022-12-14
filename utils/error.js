@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 function getGenericSchemaFieldName(field) {
   return field === "_id" ? "ID" : field.replace(/"/g, "");
 }
@@ -5,8 +7,12 @@ function getGenericSchemaFieldName(field) {
 function generalizeMongooseCastError(error) {
   const splits = error.message.split(" ");
   const model = splits[splits.length - 1].replace(/"/g, "");
-  const field = getGenericSchemaFieldName(obj.path);
-  return `${error.stringValue} is not a valid ${model} ${field}`;
+  const field = getGenericSchemaFieldName(error.path);
+  return {
+    [field]: `${getGenericSchemaFieldName(
+      error.stringValue
+    )} is not a valid ${model} ${field}`,
+  };
 }
 
 function generalizeMongooseValidationErrors(error) {
