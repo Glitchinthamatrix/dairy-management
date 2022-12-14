@@ -2,52 +2,44 @@ import { generalizeResult } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Review } = models;
 
-function addReview(req, res) {
-  Review.create(req.body)
-    .then((review, errors) => {
-      if (review) {
-        res.status(200).json(generalizeResult(review));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function addReview(req, res) {
+  try {
+    const review = await Review.create(req.body);
+    res.status(200).json(generalizeResult(review));
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-function getReview(req, res) {
-  Review.findById(req.params.reviewId)
-    .then((review) => {
-      res.status(200).json(generalizeResult(review));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getReview(req, res) {
+  try {
+    const review = Review.findOne({ _id: req.params.reviewId });
+    res.sttaus(200).json(generalizeResult(review));
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-function updateReview(req, res) {
-  Review.findOneAndUpdate({ _id: req.params.reviewId }, { $set: req.body }, { new: true })
-    .then((review, errors) => {
-      if (review) {
-        res.status(200).json(generalizeResult(review));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function updateReview(req, res) {
+  try {
+    const updated = await Review.findOneAndUpdate(
+      { _id: req.params.reviewId },
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json(updated);
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-function removeReview(req, res) {
-  Review.deleteOne({ id: req.params.reviewId })
-    .then((resp) => {
-      res.status(200).json({ deletedCount: resp.deletedCount });
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function removeReview(req, res) {
+  try {
+    const result = await Review.deleteOne({ id: req.params.reviewId });
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
 export default { addReview, getReview, updateReview, removeReview };

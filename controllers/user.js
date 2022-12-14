@@ -3,14 +3,13 @@ import { generalizeResult } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Cart, User, Wishlist } = models;
 
-function getUsers(req, res) {
-  User.find()
-    .then((users) => {
-      res.status(200).json(generalizeResult(users));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getUsers(req, res) {
+  try{
+    const users = await User.find();
+    res.status(200).json(generalizeResult(users));
+  }catch(e) {
+    res.status(500).json({});
+  }
 }
 
 async function addUser(req, res) {
@@ -44,52 +43,37 @@ async function addUser(req, res) {
   }
 }
 
-function getUser(req, res) {
-  User.findById(req.params.userId)
-    .then((user) => {
-      res.status(200).json(generalizeResult(user));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getUser(req, res) {
+  try{
+    const user = await User.findOne({_id: req.params.userId});
+    res.status(200).json(generalizeResult(user));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function updateUser(req, res) {
-  User.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { new: true })
-    .then((user, errors) => {
-      if (user) {
-        res.status(200).json(generalizeResult(user));
-      } else {
-        res.status(500).json({});
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function updateUser(req, res) {
+  try{
+    const updated = await User.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { new: true });
+    res.status(200).json(generalizeResult(updated));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function removeUser(req, res) {
-  User.deleteOne({ id: req.params.userId })
-    .then((resp) => {
-      res.status(200).json({ deletedCount: resp.deletedCount });
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function removeUser(req, res) {
+  try{
+    const result = await User.deleteOne({_id: req.params.userId});
+    res.status(200).json(result);
+  }catch(e) {
+    res.status(500).json({});
+  }
 }
 
 async function getSelf(req, res) {
   try {
-    if (!req.headers["authorization"]) {
-      res.status(401).json({});
-      return;
-    }
     const token = req.headers["authorization"];
     const session = await sessionController.getSession(token);
-    if (!session) {
-      res.status(404).json({});
-      return;
-    }
     res.status(200).json(session.user);
   } catch (e) {
     res.status(500).json({});

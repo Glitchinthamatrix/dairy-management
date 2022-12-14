@@ -2,62 +2,49 @@ import { generalizeResult } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Wishlist } = models;
 
-function getWishlists(req, res) {
-  Wishlist.find()
-    .then((wishlists) => {
-      res.status(200).json(generalizeResult(wishlists));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getWishlists(req, res) {
+  try{
+    const wishlists = await Wishlist.find();
+    res.status(200).json(generalizeResult(wishlists));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function addWishlist(req, res) {
-  Wishlist.create(req.body)
-    .then((wishlist, errors) => {
-      if (user) {
-        res.status(200).json(generalizeResult(wishlist));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function addWishlist(req, res) {
+  try{
+    const wishlist = await Wishlist.create(req.body);
+    res.status(200).json(generalizeResult(wishlist));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function getWishlist(req, res) {
-  Wishlist.findById(req.params.wishlistId)
-    .then((wishlist) => {
-      res.status(200).json(generalizeResult(wishlist));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getWishlist(req, res) {
+  try{
+    const wishlist = await Wishlist.findOne({_id: req.params.wishlistId});
+    res.status(200).json(generalizeResult(wishlist));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function updateWishlist(req, res) {
-  Wishlist.findOneAndUpdate({ _id: req.params.wishlistId }, { $set: req.body }, { new: true })
-    .then((wishlist, errors) => {
-      if (wishlist) {
-        res.status(200).json(generalizeResult(wishlist));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function updateWishlist(req, res) {
+  try{
+    const updated = await Wishlist.findOneAndUpdate({ _id: req.params.wishlistId }, { $set: req.body }, { new: true });
+    res.status(200).json(generalizeResult(updated));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
-function removeWishlist(req, res) {
-  Wishlist.deleteOne({ id: req.params.wishlistId })
-    .then((resp) => {
-      res.status(200).json({ deleteCount: resp.deletedCount });
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function removeWishlist(req, res) {
+  try{
+    const result = await Wishlist.deleteOne({_id: req.params.wishlistId});
+    res.status(200).json(result);
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
 export default { getWishlists, addWishlist, getWishlist, updateWishlist, removeWishlist };

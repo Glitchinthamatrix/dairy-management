@@ -2,51 +2,44 @@ import { generalizeResult } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Order } = models;
 
-function getOrders(req, res) {
-  Order.find()
-    .then((orders) => {
-      res.status(200).json(generalizeResult(orders));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getOrders(req, res) {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(generalizeResult(orders));
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-function addOrders(req, res) {
-  Order.create(req.body)
-    .then((order, errors) => {
-      if (order) {
-        res.status(200).json(generalizeResult(order));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
-}
-function getOrder(req, res) {
-  Order.findById(req.params.orderId)
-    .then((order) => {
-      res.status(200).json(generalizeResult(order));
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function addOrder(req, res) {
+  try {
+    const order = await Order.create(req.body);
+    res.status(200).json(generalizeResult(order));
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-function updateOrder(req, res) {
-  Order.findOneAndUpdate({ _id: req.params.orderId }, { $set: req.body }, { new: true })
-    .then((order, errors) => {
-      if (order) {
-        res.status(200).json(generalizeResult(order));
-      } else {
-        res.status(422).json(errors);
-      }
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+async function getOrder(req, res) {
+  try {
+    const order = await Order.findOne({ _id: req.params.orderId });
+    res.status(200).json(generalizeResult(order));
+  } catch (e) {
+    res.status(500).json({});
+  }
 }
 
-export default { getOrders, addOrders, getOrder, updateOrder };
+async function updateOrder(req, res) {
+  try {
+    const updated = await Order.findOneAndUpdate(
+      { _id: req.params.orderId },
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json(generalizeResult(updated));
+  } catch (e) {
+    res.status(500).json({});
+  }
+}
+
+export default { getOrders, addOrder, getOrder, updateOrder };
