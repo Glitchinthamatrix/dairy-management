@@ -4,7 +4,6 @@ import fs from "fs/promises";
 import path from "path";
 import { ERROR_CODE_FILE_NOT_FOUND } from "../constants.js";
 import { filterObject } from "../utils/object.js";
-import { handleUnexpectedMiddlewareError } from "../utils/response.js";
 const { Product } = models;
 
 const mapSellerValues = {
@@ -39,34 +38,28 @@ async function addProduct(req, res) {
     const product = await Product.create({ ...req.body, addedBy: res.locals.user.id });
     res.status(200).json(generalizeResult(product));
   } catch (e) {
-    handleUnexpectedMiddlewareError(e, res);
+    res.status(500).json({});
   }
 }
 
 async function getProduct(req, res) {
   try {
     const user = res.locals.user;
-    let product = null;
-    if (!user.isASeller) {
-      product = await Product.find().populate(["category", "brand", "addedBy"]);
-    } else {
-      product = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
-    }
+    let product = await Product.findOne({_id: req.params.productId}).populate(["category", "brand", "addedBy"]);
+
     if (product === null) {
       res.status(404).json({});
       return;
     }
+    product = generalizeResult(product);
 
-    if (user.isASeller && product.addedBy.toString() !== user.id) {
+    if (user.isASeller && product.addedBy.id !== user.id) {
       res.status(401).json({});
       return;
     }
+    product.addedBy = filterObject(product.addedBy, mapSellerValues);
 
-    if(!user.isASeller){
-      product.addedBy = filterObject(product.addedBy, mapSellerValues);
-    }
-
-    res.status(200).json(generalizeResult(product));
+    res.status(200).json(product);
   } catch (e) {
     res.status(500).json({});
   }
