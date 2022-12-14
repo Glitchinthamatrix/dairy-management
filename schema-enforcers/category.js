@@ -3,7 +3,7 @@ import models from "../models/_models.js";
 const { Category } = models;
 
 const properties = {
-  name: { type: STRING.type, required: true },
+  name: { type: STRING.type, required: true, unique: true },
 };
 
 export default async (req, res, next) => {
