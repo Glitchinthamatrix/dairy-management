@@ -4,7 +4,14 @@ import fs from "fs/promises";
 import path from "path";
 import { ERROR_CODE_FILE_NOT_FOUND } from "../constants.js";
 import { filterObject } from "../utils/object.js";
+import { handleUnexpectedMiddlewareError } from "../utils/response.js";
 const { Product } = models;
+
+const mapSellerValues = {
+  name: "name",
+  id: "id",
+  email: "email",
+};
 
 async function getProducts(req, res) {
   try {
@@ -16,14 +23,11 @@ async function getProducts(req, res) {
       products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
     }
     products = generalizeResult(products);
-    const mapSellerValues = {
-      name: "name",
-      id: "id",
-      email: "email",
-    };
-    products.forEach(
-      (product) => (product.addedBy = filterObject(product.addedBy, mapSellerValues))
-    );
+    if(!user.isASeller){
+      products.forEach(
+        (product) => (product.addedBy = filterObject(product.addedBy, mapSellerValues))
+      );
+    }
     res.status(200).json(products);
   } catch (e) {
     res.status(500).json({});
@@ -35,17 +39,19 @@ async function addProduct(req, res) {
     const product = await Product.create({ ...req.body, addedBy: res.locals.user.id });
     res.status(200).json(generalizeResult(product));
   } catch (e) {
-    res.status(500).json({});
+    handleUnexpectedMiddlewareError(e, res);
   }
 }
 
 async function getProduct(req, res) {
   try {
     const user = res.locals.user;
-    let product = await Product.findOne({ _id: req.params.productId }).populate([
-      "category",
-      "brand",
-    ]);
+    let product = null;
+    if (!user.isASeller) {
+      product = await Product.find().populate(["category", "brand", "addedBy"]);
+    } else {
+      product = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
+    }
     if (product === null) {
       res.status(404).json({});
       return;
@@ -54,6 +60,10 @@ async function getProduct(req, res) {
     if (user.isASeller && product.addedBy.toString() !== user.id) {
       res.status(401).json({});
       return;
+    }
+
+    if(!user.isASeller){
+      product.addedBy = filterObject(product.addedBy, mapSellerValues);
     }
 
     res.status(200).json(generalizeResult(product));
