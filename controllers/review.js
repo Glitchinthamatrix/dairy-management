@@ -4,8 +4,8 @@ const { Review } = models;
 
 async function getReview(req, res) {
   try {
-    const review = Review.findOne({ _id: req.params.reviewId });
-    res.sttaus(200).json(generalizeMongooseDocument(review));
+    const review = await Review.findOne({ _id: req.params.reviewId });
+    res.status(200).json(generalizeMongooseDocument(review));
   } catch (e) {
     res.status(500).json({});
   }
