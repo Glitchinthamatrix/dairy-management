@@ -54,13 +54,13 @@ app.use("/assets", assetRouter);
 app.use("/auth", authRouter);
 app.use("/brands", brandRouter);
 app.use("/carts", cartRouter);
+app.use("/categories", categoryRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
+app.use("/sessions", sessionRouter);
 app.use("/transactions", transactionRouter);
 app.use("/users", userRouter);
 app.use("/wishlists", wishlistRouter);
-app.use("/sessions", sessionRouter);
-app.use("/categories", categoryRouter);
 
 mongoose.connect(
   `mongodb+srv://nitesh:mayday9501@cluster0.ouqxf.mongodb.net/?retryWrites=true&w=majority`
