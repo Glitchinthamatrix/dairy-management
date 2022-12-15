@@ -1,7 +1,7 @@
-import { STRING, schemaEnforcer } from "../utils/validation.js";
+import { MONGOOSE_ID, schemaEnforcer } from "../utils/validation.js";
 
 const updateCartProductsRequestBodySchema = {
-  product: { type: STRING.type, required: true },
+  product: { type: MONGOOSE_ID.type, required: true },
 };
 
 export function validateUpdateCartProductsRequestBody (req, res, next) {
