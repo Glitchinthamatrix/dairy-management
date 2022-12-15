@@ -181,9 +181,9 @@ async function addReview(req, res, next) {
     review = generalizeMongooseDocument(review);
     review.author = filterObject(review.author, mapReviewAuthorValues);
     const product = await Product.findOne({ _id: productId });
-    product.reviews = product.reviews.concat(review._id);
-    const updated = await product.save();
-    res.status(200).json(review);;
+    product.reviews = product.reviews.concat([review.id]);
+    await product.save();
+    res.status(200).json(review);
   } catch (e) {
     res.status(500).json({});
   }
