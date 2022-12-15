@@ -48,7 +48,7 @@ export const HUMAN_TYPE_NAMES = {
   [TYPE_INTEGER]: "number",
   [TYPE_FLOAT]: "number",
   [TYPE_DATE]: "date",
-  [TYPE_MONGOOSE_ID]: "object ID",
+  [TYPE_MONGOOSE_ID]: "ID",
 };
 
 // Type validators
