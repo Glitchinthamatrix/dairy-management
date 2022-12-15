@@ -5,8 +5,6 @@ import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
 const { reviewController } = controllers;
 const { reviewSchemaEnforcer } = schemaEnforcers;
 
-router.route("/").post(reviewSchemaEnforcer, reviewController.addReview);
-
 router
   .route("/:reviewId")
   .get(reviewController.getReview)
