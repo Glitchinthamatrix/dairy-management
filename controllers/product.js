@@ -12,6 +12,11 @@ const mapSellerValues = {
   email: "email",
 };
 
+const mapReviewAuthorValues = {
+  name: "name",
+  id: "id",
+};
+
 async function getProducts(req, res) {
   try {
     let products = [];
@@ -62,10 +67,6 @@ async function getProduct(req, res) {
       .populate({ path: "reviews", populate: { path: "author" } });
     product = generalizeMongooseDocument(product);
     product.addedBy = filterObject(product.addedBy, mapSellerValues);
-    const mapReviewAuthorValues = {
-      name: "name",
-      id: "id",
-    };
     product.reviews = product.reviews.map((review) => ({
       id: review.id,
       comment: review.comment,
@@ -176,11 +177,13 @@ async function addReview(req, res, next) {
   try {
     const productId = req.params.productId;
     const customerId = res.locals.user.id;
-    const review = await Review.create({ author: customerId, comment: req.body.comment });
+    let review = await (await Review.create({ author: customerId, comment: req.body.comment })).populate("author");
+    review = generalizeMongooseDocument(review);
+    review.author = filterObject(review.author, mapReviewAuthorValues);
     const product = await Product.findOne({ _id: productId });
     product.reviews = product.reviews.concat(review._id);
     const updated = await product.save();
-    res.status(200).json(generalizeMongooseDocument(updated));
+    res.status(200).json(review);;
   } catch (e) {
     res.status(500).json({});
   }
