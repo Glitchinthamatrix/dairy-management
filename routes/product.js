@@ -4,6 +4,7 @@ import controllers from "../controllers/_controllers.js";
 import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
 import { upload } from "../libs/multer.js";
 import path from "path";
+import { validateProductReviewRequestBody } from "../utils/request.js";
 const { authController, productController } = controllers;
 const { productSchemaEnforcer } = schemaEnforcers;
 
@@ -51,5 +52,14 @@ router
     productController.updateProduct
   )
   .delete(authController.verifyUserAndPassAsResponseLocal, productController.removeProduct);
+
+router
+  .route("/:productId/reviews")
+  .post(
+    authController.verifyUserAndPassAsResponseLocal,
+    authController.verifyCustomerFromResponseLocals,
+    validateProductReviewRequestBody,
+    productController.addReview
+  );
 
 export default router;

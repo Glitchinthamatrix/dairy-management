@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import { ERROR_CODE_FILE_NOT_FOUND } from "../constants.js";
 import { filterObject } from "../utils/object.js";
-const { Product } = models;
+const { Product, Review } = models;
 
 const mapSellerValues = {
   name: "name",
@@ -158,6 +158,20 @@ async function removeProductImage(req, res, next) {
   }
 }
 
+async function addReview(req, res, next) {
+  try{
+    const productId = req.params.productId;
+    const customerId = res.locals.user.id;
+    const review = await Review.create({author: customerId, comment: req.body.comment});
+    const product = await Product.findOne({_id: productId});
+    product.reviews = product.reviews.concat(review._id);
+    const updated = await product.save();
+    res.status(200).json(generalizeMongooseDocument(updated));
+  }catch(e) {
+    res.status(500).json({});
+  }
+}
+
 export default {
   getProducts,
   addProduct,
@@ -167,4 +181,5 @@ export default {
   verifySellerProductDirectory,
   addImageAddressToProduct,
   removeProductImage,
+  addReview,
 };
