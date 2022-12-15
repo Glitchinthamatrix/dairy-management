@@ -1,7 +1,7 @@
 import models from "../models/_models.js";
 // importing session-controller directly to avoid circular dependency
 // auth-controller is being imported in _controllers.js
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import sessionController from "./session.js";
 const { Cart, User, Wishlist } = models;
 
@@ -24,7 +24,7 @@ async function signUp(req, res) {
       user.wishlist = wishlist._id;
       user.cart = cart._id;
       user.save().then((user) => {
-        res.status(200).json(generalizeResult(user));
+        res.status(200).json(generalizeMongooseDocument(user));
       });
     })
     .catch((e) => {

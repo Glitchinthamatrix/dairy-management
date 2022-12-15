@@ -29,7 +29,7 @@ function generalizeNestedValues(object) {
   }
 }
 
-export function generalizeResult(result) {
+export function generalizeMongooseDocument(result) {
   if (Array.isArray(result)) {
     result = result.map((item) => item.toObject());
     generalizeArray(result);

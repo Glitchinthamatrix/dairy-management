@@ -1,12 +1,12 @@
 import sessionController from "../controllers/session.js";
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Cart, User, Wishlist } = models;
 
 async function getUsers(req, res) {
   try{
     const users = await User.find();
-    res.status(200).json(generalizeResult(users));
+    res.status(200).json(generalizeMongooseDocument(users));
   }catch(e) {
     res.status(500).json({});
   }
@@ -27,7 +27,7 @@ async function addUser(req, res) {
     user.cart = cart.id;
     user.wishlist = wishlist.id;
     user = await user.save();
-    res.status(200).json(generalizeResult(user));
+    res.status(200).json(generalizeMongooseDocument(user));
   } catch (e) {
     if (cart !== undefined) {
       await Cart.deleteOne({ id: cart.id });
@@ -46,7 +46,7 @@ async function addUser(req, res) {
 async function getUser(req, res) {
   try{
     const user = await User.findOne({_id: req.params.userId});
-    res.status(200).json(generalizeResult(user));
+    res.status(200).json(generalizeMongooseDocument(user));
   }catch(e){
     res.status(500).json({});
   }
@@ -55,7 +55,7 @@ async function getUser(req, res) {
 async function updateUser(req, res) {
   try{
     const updated = await User.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { new: true });
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   }catch(e){
     res.status(500).json({});
   }

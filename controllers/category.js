@@ -1,11 +1,11 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Category } = models;
 
 async function getCategories(req, res) {
   try {
     const categories = await Category.find();
-    res.status(200).json(generalizeResult(categories));
+    res.status(200).json(generalizeMongooseDocument(categories));
   } catch (e) {
     res.status(500).json({});
   }

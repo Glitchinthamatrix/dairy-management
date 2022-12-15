@@ -1,4 +1,4 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 import fs from "fs/promises";
 import path from "path";
@@ -21,7 +21,7 @@ async function getProducts(req, res) {
     } else {
       products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
     }
-    products = generalizeResult(products);
+    products = generalizeMongooseDocument(products);
     if(!user.isASeller){
       products.forEach(
         (product) => (product.addedBy = filterObject(product.addedBy, mapSellerValues))
@@ -36,7 +36,7 @@ async function getProducts(req, res) {
 async function addProduct(req, res) {
   try {
     const product = await Product.create({ ...req.body, addedBy: res.locals.user.id });
-    res.status(200).json(generalizeResult(product));
+    res.status(200).json(generalizeMongooseDocument(product));
   } catch (e) {
     res.status(500).json({});
   }
@@ -55,7 +55,7 @@ async function getProduct(req, res) {
       return;
     }
     product = await Product.findOne({_id: req.params.productId}).populate(["addedBy","brand", "category", "reviews"])
-    product = generalizeResult(product);
+    product = generalizeMongooseDocument(product);
     product.addedBy = filterObject(product.addedBy, mapSellerValues);
     res.status(200).json(product);
   } catch (e) {
@@ -75,7 +75,7 @@ async function updateProduct(req, res) {
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }
@@ -130,7 +130,7 @@ async function addImageAddressToProduct(req, res, next) {
       { $set: { images: [...product.images, ...imageAddresses] } },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }
@@ -148,7 +148,7 @@ async function removeProductImage(req, res, next) {
       { $set: { images: updatedImages } },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     if (e.code === ERROR_CODE_FILE_NOT_FOUND) {
       res.status(404).json({});

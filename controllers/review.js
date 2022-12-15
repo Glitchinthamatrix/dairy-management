@@ -1,11 +1,11 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Review } = models;
 
 async function addReview(req, res) {
   try {
     const review = await Review.create(req.body);
-    res.status(200).json(generalizeResult(review));
+    res.status(200).json(generalizeMongooseDocument(review));
   } catch (e) {
     res.status(500).json({});
   }
@@ -14,7 +14,7 @@ async function addReview(req, res) {
 async function getReview(req, res) {
   try {
     const review = Review.findOne({ _id: req.params.reviewId });
-    res.sttaus(200).json(generalizeResult(review));
+    res.sttaus(200).json(generalizeMongooseDocument(review));
   } catch (e) {
     res.status(500).json({});
   }

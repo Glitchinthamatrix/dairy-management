@@ -1,11 +1,11 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Wishlist } = models;
 
 async function getWishlists(req, res) {
   try{
     const wishlists = await Wishlist.find();
-    res.status(200).json(generalizeResult(wishlists));
+    res.status(200).json(generalizeMongooseDocument(wishlists));
   }catch(e){
     res.status(500).json({});
   }
@@ -14,7 +14,7 @@ async function getWishlists(req, res) {
 async function addWishlist(req, res) {
   try{
     const wishlist = await Wishlist.create(req.body);
-    res.status(200).json(generalizeResult(wishlist));
+    res.status(200).json(generalizeMongooseDocument(wishlist));
   }catch(e){
     res.status(500).json({});
   }
@@ -23,7 +23,7 @@ async function addWishlist(req, res) {
 async function getWishlist(req, res) {
   try{
     const wishlist = await Wishlist.findOne({_id: req.params.wishlistId}).populate(["products"]);
-    res.status(200).json(generalizeResult(wishlist));
+    res.status(200).json(generalizeMongooseDocument(wishlist));
   }catch(e){
     res.status(500).json({});
   }
@@ -38,7 +38,7 @@ async function addProductToWishlist(req, res, next) {
       { $set: {products: [...wishlist.products, req.body.product]} },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     console.log(e);
     res.status(500).json({});
@@ -55,7 +55,7 @@ async function removeProductFromWishlist(req, res, next) {
       { $set: {products: products} },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }

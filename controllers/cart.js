@@ -1,11 +1,11 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Cart } = models;
 
 async function getCarts(req, res) {
   try {
     const carts = await Cart.find();
-    res.status(200).json(generalizeResult(carts));
+    res.status(200).json(generalizeMongooseDocument(carts));
   } catch (e) {
     res.status(500).json({});
   }
@@ -14,7 +14,7 @@ async function getCarts(req, res) {
 async function addCart(req, res) {
   try {
     const cart = await Cart.create(req.body);
-    res.status(200).json(generalizeResult(cart));
+    res.status(200).json(generalizeMongooseDocument(cart));
   } catch (e) {
     res.status(500).json({});
   }
@@ -23,7 +23,7 @@ async function addCart(req, res) {
 async function getCart(req, res) {
   try {
     const cart = await Cart.findOne({ _id: req.params.cartId });
-    res.status(200).json(generalizeResult(cart));
+    res.status(200).json(generalizeMongooseDocument(cart));
   } catch (e) {
     res.status(500).json({});
   }
@@ -38,7 +38,7 @@ async function addProductToCart(req, res) {
       { $set: {products: [...cart.products, req.body.product]} },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }
@@ -54,7 +54,7 @@ async function removeProductFromCart(req, res) {
       { $set: {products: products} },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }

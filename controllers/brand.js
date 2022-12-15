@@ -1,4 +1,4 @@
-import { generalizeResult } from "../libs/mongoose.js";
+import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Brand, User } = models;
 
@@ -17,7 +17,7 @@ async function getBrands(_, res) {
     if (isASeller) {
       brands = await Brand.find({ addedBy: user.id });
     }
-    res.status(200).json(generalizeResult(brands));
+    res.status(200).json(generalizeMongooseDocument(brands));
   } catch (e) {
     res.status(500).json({});
   }
@@ -37,7 +37,7 @@ async function getBrand(req, res, next) {
       brand = await Brand.findOne({ _id: brandId, addedBy: user.id });
     }
     if (brand) {
-      res.status(200).json(generalizeResult(brand));
+      res.status(200).json(generalizeMongooseDocument(brand));
     } else {
       res.status(404).json({});
     }
@@ -53,7 +53,7 @@ async function addBrand(req, res) {
     const seller = await User.findOne({ email: res.locals.user.email });
     seller.affiliateBrands.push(brand._id);
     await seller.save();
-    res.status(200).json(generalizeResult(brand));
+    res.status(200).json(generalizeMongooseDocument(brand));
   } catch (e) {
     res.status(500).json({});
   }
@@ -66,7 +66,7 @@ async function updateBrand(req, res, next) {
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(generalizeResult(updated));
+    res.status(200).json(generalizeMongooseDocument(updated));
   } catch (e) {
     res.status(500).json({});
   }
