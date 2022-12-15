@@ -15,6 +15,7 @@ const {
   categoryRouter,
   orderRouter,
   productRouter,
+  reviewRouter,
   transactionRouter,
   userRouter,
   wishlistRouter,
@@ -57,6 +58,7 @@ app.use("/carts", cartRouter);
 app.use("/categories", categoryRouter);
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
+app.use("/reviews", reviewRouter);
 app.use("/sessions", sessionRouter);
 app.use("/transactions", transactionRouter);
 app.use("/users", userRouter);
