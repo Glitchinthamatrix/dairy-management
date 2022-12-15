@@ -29,11 +29,34 @@ async function getWishlist(req, res) {
   }
 }
 
-async function updateWishlist(req, res) {
-  try{
-    const updated = await Wishlist.findOneAndUpdate({ _id: req.params.wishlistId }, { $set: req.body }, { new: true });
+async function addProductToWishlist(req, res, next) {
+  try {
+    const wishlistId = req.params.wishlistId;
+    const wishlist = await Wishlist.findOne({_id: wishlistId});
+    const updated = await Wishlist.findOneAndUpdate(
+      { _id: wishlistId },
+      { $set: {products: [...wishlist.products, req.body.product]} },
+      { new: true }
+    );
     res.status(200).json(generalizeResult(updated));
-  }catch(e){
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({});
+  }
+}
+
+async function removeProductFromWishlist(req, res, next) {
+  try {
+    const wishlistId = req.params.wishlistId;
+    const wishlist = await Wishlist.findOne({_id: wishlistId});
+    const products = wishlist.products.filter((product) => product.toString() !== req.body.product);
+    const updated = await Wishlist.findOneAndUpdate(
+      { _id: wishlistId },
+      { $set: {products: products} },
+      { new: true }
+    );
+    res.status(200).json(generalizeResult(updated));
+  } catch (e) {
     res.status(500).json({});
   }
 }
@@ -47,4 +70,4 @@ async function removeWishlist(req, res) {
   }
 }
 
-export default { getWishlists, addWishlist, getWishlist, updateWishlist, removeWishlist };
+export default { getWishlists, addWishlist, getWishlist, addProductToWishlist, removeProductFromWishlist, removeWishlist };

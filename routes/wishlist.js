@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import controllers from "../controllers/_controllers.js";
 import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
+import {validateUpdateWishlistProductsRequestBody} from "../utils/request.js";
 const { wishlistController } = controllers;
 const { wishlistSchemaEnforcer } = schemaEnforcers;
 
@@ -13,7 +14,7 @@ router
 router
   .route("/:wishlistId")
   .get(wishlistController.getWishlist)
-  .put(wishlistSchemaEnforcer, wishlistController.updateWishlist)
-  .delete(wishlistController.removeWishlist);
+  .put(validateUpdateWishlistProductsRequestBody, wishlistController.addProductToWishlist)
+  .delete(validateUpdateWishlistProductsRequestBody, wishlistController.removeProductFromWishlist);
 
 export default router;
