@@ -22,7 +22,7 @@ async function getProducts(req, res) {
       products = await Product.find({ addedBy: user.id }).populate(["category", "brand"]);
     }
     products = generalizeMongooseDocument(products);
-    if(!user.isASeller){
+    if (!user.isASeller) {
       products.forEach(
         (product) => (product.addedBy = filterObject(product.addedBy, mapSellerValues))
       );
@@ -173,15 +173,15 @@ async function removeProductImage(req, res, next) {
 }
 
 async function addReview(req, res, next) {
-  try{
+  try {
     const productId = req.params.productId;
     const customerId = res.locals.user.id;
-    const review = await Review.create({author: customerId, comment: req.body.comment});
-    const product = await Product.findOne({_id: productId});
+    const review = await Review.create({ author: customerId, comment: req.body.comment });
+    const product = await Product.findOne({ _id: productId });
     product.reviews = product.reviews.concat(review._id);
     const updated = await product.save();
     res.status(200).json(generalizeMongooseDocument(updated));
-  }catch(e) {
+  } catch (e) {
     res.status(500).json({});
   }
 }
