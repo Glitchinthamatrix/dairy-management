@@ -45,20 +45,18 @@ async function addProduct(req, res) {
 async function getProduct(req, res) {
   try {
     const user = res.locals.user;
-    let product = await Product.findOne({_id: req.params.productId}).populate(["category", "brand", "addedBy"]);
-
+    let product = await Product.findOne({_id: req.params.productId}).populate(["addedBy"]);
     if (product === null) {
       res.status(404).json({});
       return;
     }
-    product = generalizeResult(product);
-
-    if (user.isASeller && product.addedBy.id !== user.id) {
+    if (user.isASeller && product.addedBy.id.toString() !== user.id) {
       res.status(401).json({});
       return;
     }
+    product = await Product.findOne({_id: req.params.productId}).populate(["addedBy","brand", "category", "reviews"])
+    product = generalizeResult(product);
     product.addedBy = filterObject(product.addedBy, mapSellerValues);
-
     res.status(200).json(product);
   } catch (e) {
     res.status(500).json({});
