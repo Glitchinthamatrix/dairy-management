@@ -22,7 +22,7 @@ async function addWishlist(req, res) {
 
 async function getWishlist(req, res) {
   try{
-    const wishlist = await Wishlist.findOne({_id: req.params.wishlistId});
+    const wishlist = await Wishlist.findOne({_id: req.params.wishlistId}).populate(["products"]);
     res.status(200).json(generalizeResult(wishlist));
   }catch(e){
     res.status(500).json({});
