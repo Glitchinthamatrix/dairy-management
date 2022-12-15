@@ -4,8 +4,6 @@ import mongoose from "mongoose";
 import { nullifyFalsyValues } from "./utils/object.js";
 const app = express();
 const PORT = process.env.PORT || 9000;
-import fs from "fs/promises";
-import path from "path";
 
 // Route Imports
 import routes from "./routes/_routes.js";
