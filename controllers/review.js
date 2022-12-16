@@ -1,6 +1,12 @@
 import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
+import { filterObject } from "../utils/object.js";
 const { Review } = models;
+
+const mapReviewAuthorValues = {
+  id: "id",
+  name: "name",
+}
 
 async function getReview(req, res) {
   try {
@@ -13,11 +19,13 @@ async function getReview(req, res) {
 
 async function updateReview(req, res) {
   try {
-    const updated = await Review.findOneAndUpdate(
+    let updated = await Review.findOneAndUpdate(
       { _id: req.params.reviewId },
-      { $set: req.body },
+      { $set: {comment: req.body.comment} },
       { new: true }
-    );
+    ).populate(["author"]);
+    updated = generalizeMongooseDocument(updated);
+    updated.author = filterObject(updated.author, mapReviewAuthorValues);
     res.status(200).json(updated);
   } catch (e) {
     res.status(500).json({});
