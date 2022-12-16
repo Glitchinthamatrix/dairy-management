@@ -59,12 +59,7 @@ async function getProduct(req, res) {
       res.status(401).json({});
       return;
     }
-    product = await Product.findOne({ _id: req.params.productId })
-      .populate({ path: "brand" })
-      .populate({ path: "addedBy" })
-      .populate({ path: "category" })
-      .populate({ path: "reviews" })
-      .populate({ path: "reviews", populate: { path: "author" } });
+    product = await Product.findOne({ _id: req.params.productId }).populate([{path: "addedBy"}, {path: "brand"}, {path: "category"}, {path: "reviews"}, {path: "reviews", populate: {path: "author"}}])
     product = generalizeMongooseDocument(product);
     product.addedBy = filterObject(product.addedBy, mapSellerValues);
     product.reviews = product.reviews.map((review) => ({
