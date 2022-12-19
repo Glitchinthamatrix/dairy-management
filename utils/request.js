@@ -38,3 +38,13 @@ export function validateProductReviewRequestBody (req, res, next) {
     modelProperties: reviewRequestBodySchema,
   });
 };
+
+export function verifyParamAssociationToUser(req, res, next, map) {
+  for(let param in map){
+    if(req.params[param] !== res.locals.user[map[param]]){
+      res.status(401).json({});
+      return;
+    }
+  }
+  next();
+}

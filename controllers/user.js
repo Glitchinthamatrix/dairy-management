@@ -4,10 +4,10 @@ import models from "../models/_models.js";
 const { Cart, User, Wishlist } = models;
 
 async function getUsers(req, res) {
-  try{
+  try {
     const users = await User.find();
     res.status(200).json(generalizeMongooseDocument(users));
-  }catch(e) {
+  } catch (e) {
     res.status(500).json({});
   }
 }
@@ -44,28 +44,32 @@ async function addUser(req, res) {
 }
 
 async function getUser(req, res) {
-  try{
-    const user = await User.findOne({_id: req.params.userId});
+  try {
+    const user = await User.findOne({ _id: req.params.userId });
     res.status(200).json(generalizeMongooseDocument(user));
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
 
 async function updateUser(req, res) {
-  try{
-    const updated = await User.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { new: true });
+  try {
+    const updated = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { new: true }
+    );
     res.status(200).json(generalizeMongooseDocument(updated));
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
 
 async function removeUser(req, res) {
-  try{
-    const result = await User.deleteOne({_id: req.params.userId});
+  try {
+    const result = await User.deleteOne({ _id: req.params.userId });
     res.status(200).json(result);
-  }catch(e) {
+  } catch (e) {
     res.status(500).json({});
   }
 }
@@ -80,4 +84,49 @@ async function getSelf(req, res) {
   }
 }
 
-export default { getUsers, addUser, getUser, updateUser, removeUser, getSelf };
+async function addProfilePicture(req, res, next) {
+  try{
+    const user = await User.findOne({_id: req.params.userId});
+    if(user.picture){
+      res.status(400).json({picture: "Picture is already added"});
+      return;
+    }
+    setUserProfilePicture(req, res, next);
+  }catch(e){
+    res.status(500).json({});
+  }
+}
+
+function updateProfilePicture(req, res, next) {
+  try{
+    setUserProfilePicture(req, res, next);
+  }catch(e){
+    res.status(500).json({});
+  }
+}
+
+async function setUserProfilePicture(req, res, next) {
+  const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: {picture: req.files.picture[0].filename}}, {new: true});
+  res.status(200).json(user);
+}
+
+async function removeProfilePicture(req, res, next) {
+  try {
+    await User.findOneAndUpdate({_id: req.params.userId}, {$set: {picture: null}}, {new: true});
+    res.status(200).json({ acknowledged: true, deleteCount: 1 });
+  } catch (e) {
+    res.status(500).json({});
+  }
+}
+
+export default {
+  getUsers,
+  addUser,
+  getUser,
+  updateUser,
+  removeUser,
+  getSelf,
+  addProfilePicture,
+  updateProfilePicture,
+  removeProfilePicture
+};
