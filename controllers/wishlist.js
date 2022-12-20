@@ -33,6 +33,10 @@ async function addProductToWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
     const wishlist = await Wishlist.findOne({_id: wishlistId});
+    if(wishlist.user !== res.locals.user.id){
+      res.status(401).json({});
+      return;
+    }
     const updated = await Wishlist.findOneAndUpdate(
       { _id: wishlistId },
       { $set: {products: [...wishlist.products, req.body.product]} },
@@ -49,6 +53,10 @@ async function removeProductFromWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
     const wishlist = await Wishlist.findOne({_id: wishlistId});
+    if(wishlist.user !== res.locals.user.id){
+      res.status(401).json({});
+      return;
+    }
     const products = wishlist.products.filter((product) => product.toString() !== req.body.product);
     const updated = await Wishlist.findOneAndUpdate(
       { _id: wishlistId },
