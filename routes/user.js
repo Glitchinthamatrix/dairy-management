@@ -1,12 +1,12 @@
 import express from "express";
-const router = express.Router();
-import controllers from "../controllers/_controllers.js";
-import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
-import { upload } from "../libs/multer.js";
-import { verifyParamAssociationToUser } from "../utils/request.js";
-import { removeFileMiddleware } from "../utils/file.js";
 import path from "path";
+import controllers from "../controllers/_controllers.js";
+import { upload } from "../libs/multer.js";
+import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
+import { doesFileExist, removeFileMiddleware } from "../utils/file.js";
+import { verifyParamAssociationToUser } from "../utils/request.js";
 import { sendFileStream } from "../utils/response.js";
+const router = express.Router();
 const { authController, userController } = controllers;
 const { userSchemaEnforcer } = schemaEnforcers;
 
@@ -37,6 +37,16 @@ router
   .post(
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
+    (req, res, next) => verifyFileAbsence(res, `${req.params.userId}.jpeg`),
+    (req, res, next) => {
+      if (
+        !doesFileExist(path.join(process.cwd(), "uploads", "profiles"), `${req.params.userId}`)
+      ) {
+        next();
+      } else {
+        res.status(400).json({});
+      }
+    },
     (req, res, next) =>
       upload({
         req: req,
@@ -51,8 +61,7 @@ router
         fileFilter(file) {
           return ["jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
         },
-      }),
-    userController.addProfilePicture
+      })
   )
   .put(
     authController.verifyUserAndPassAsResponseLocal,
@@ -78,20 +87,27 @@ router
         fileFilter(file) {
           return ["jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
         },
-      }),
-    userController.updateProfilePicture
+      })
   )
   .delete(
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
+    (req, res, next) => {
+      if (
+        !doesFileExist(path.join(process.cwd(), "uploads", "profiles"), `${req.params.userId}`)
+      ) {
+        next();
+      } else {
+        res.status(400).json({});
+      }
+    },
     (req, res, next) =>
       removeFileMiddleware(
         req,
         res,
         next,
         path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
-      ),
-    userController.removeProfilePicture
+      )
   );
 
 export default router;

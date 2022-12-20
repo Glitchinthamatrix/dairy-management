@@ -84,41 +84,6 @@ async function getSelf(req, res) {
   }
 }
 
-async function addProfilePicture(req, res, next) {
-  try{
-    const user = await User.findOne({_id: req.params.userId});
-    if(user.picture){
-      res.status(400).json({picture: "Picture is already added"});
-      return;
-    }
-    setUserProfilePicture(req, res, next);
-  }catch(e){
-    res.status(500).json({});
-  }
-}
-
-function updateProfilePicture(req, res, next) {
-  try{
-    setUserProfilePicture(req, res, next);
-  }catch(e){
-    res.status(500).json({});
-  }
-}
-
-async function setUserProfilePicture(req, res, next) {
-  const user = await User.findOneAndUpdate({_id: req.params.userId}, {$set: {picture: req.files.picture[0].filename}}, {new: true});
-  res.status(200).json(user);
-}
-
-async function removeProfilePicture(req, res, next) {
-  try {
-    await User.findOneAndUpdate({_id: req.params.userId}, {$set: {picture: null}}, {new: true});
-    res.status(200).json({ acknowledged: true, deleteCount: 1 });
-  } catch (e) {
-    res.status(500).json({});
-  }
-}
-
 export default {
   getUsers,
   addUser,
@@ -126,7 +91,4 @@ export default {
   updateUser,
   removeUser,
   getSelf,
-  addProfilePicture,
-  updateProfilePicture,
-  removeProfilePicture
 };

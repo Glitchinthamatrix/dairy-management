@@ -9,7 +9,6 @@ const userSchema = new Schema({
     unique: [true, "This email is already taken"],
   },
   password: { type: String, required: [true, "Password is required"] },
-  picture: { type: String, default: null },
   isASeller: { type: Boolean, default: false },
   shippingAddress: { type: String },
   cart: { type: Schema.Types.ObjectId, ref: "Cart" },
