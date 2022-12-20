@@ -33,7 +33,7 @@ async function addProductToWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
     const wishlist = await Wishlist.findOne({_id: wishlistId});
-    if(wishlist.user !== res.locals.user.id){
+    if(wishlist.user.toString() !== res.locals.user.id){
       res.status(401).json({});
       return;
     }
@@ -53,7 +53,7 @@ async function removeProductFromWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
     const wishlist = await Wishlist.findOne({_id: wishlistId});
-    if(wishlist.user !== res.locals.user.id){
+    if(wishlist.user.toString() !== res.locals.user.id){
       res.status(401).json({});
       return;
     }

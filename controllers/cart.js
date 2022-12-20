@@ -33,7 +33,7 @@ async function addProductToCart(req, res) {
   try {
     const cartId = req.params.cartId;
     const cart = await Cart.findOne({_id: cartId});
-    if(cart.user !== res.locals.user.id){
+    if(cart.user.toString() !== res.locals.user.id){
       res.status(401).json({});
       return;
     }
@@ -52,7 +52,7 @@ async function removeProductFromCart(req, res) {
   try {
     const cartId = req.params.cartId;
     const cart = await Cart.findOne({_id: cartId});
-    if(cart.user !== res.locals.user.id){
+    if(cart.user.toString() !== res.locals.user.id){
       res.status(401).json({});
       return;
     }
