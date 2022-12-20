@@ -70,13 +70,6 @@ router
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
     (req, res, next) =>
-      removeFileMiddleware(
-        req,
-        res,
-        next,
-        path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
-      ),
-    (req, res, next) =>
       upload({
         req: req,
         res: res,
