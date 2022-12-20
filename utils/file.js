@@ -17,3 +17,10 @@ export async function removeFileMiddleware(req, res, next, address) {
     }
   }
 }
+
+export async function doesFileExist(address, filename) {
+  let content = await fs.readdir(address, { withFileTypes: true });
+  content = content.filter((item) => !item.isDirectory());
+  const exists = content.find((item) => item.name === filename);
+  return exists !== undefined;
+}
