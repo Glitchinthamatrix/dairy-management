@@ -3,7 +3,7 @@ const router = express.Router();
 import controllers from "../controllers/_controllers.js";
 import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
 import { validateUpdateCartProductsRequestBody } from "../utils/request.js";
-const { cartController } = controllers;
+const { authController, cartController } = controllers;
 const { cartSchemaEnforcer } = schemaEnforcers;
 
 router
@@ -13,8 +13,16 @@ router
 
 router
   .route("/:cartId")
-  .get(cartController.getCart)
-  .put(validateUpdateCartProductsRequestBody, cartController.addProductToCart)
-  .delete(validateUpdateCartProductsRequestBody, cartController.removeProductFromCart)
+  .get(authController.verifyUserAndPassAsResponseLocal, cartController.getCart)
+  .put(
+    authController.verifyUserAndPassAsResponseLocal,
+    validateUpdateCartProductsRequestBody,
+    cartController.addProductToCart
+  )
+  .delete(
+    authController.verifyUserAndPassAsResponseLocal,
+    validateUpdateCartProductsRequestBody,
+    cartController.removeProductFromCart
+  );
 
 export default router;
