@@ -26,7 +26,7 @@ async function addCart(req, res) {
 
 async function getCart(req, res) {
   try {
-    const cart = await Cart.findOne({ _id: req.params.cartId });
+    const cart = await Cart.findOne({ _id: req.params.cartId }).populate(["products"]);
     res.status(200).json(generalizeMongooseDocument(cart));
   } catch (e) {
     res.status(500).json({});
