@@ -34,38 +34,6 @@ router
       path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
     )
   )
-  .post(
-    authController.verifyUserAndPassAsResponseLocal,
-    (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
-    async (req, res, next) => {
-      if (
-        !(await doesFileExist(
-          path.join(process.cwd(), "uploads", "profiles"),
-          `${req.params.userId}.jpeg`
-        ))
-      ) {
-        next();
-      } else {
-        res.status(400).json({});
-      }
-    },
-    (req, res, next) =>
-      upload({
-        req: req,
-        res: res,
-        next: next,
-        destination: path.join(process.cwd(), "uploads", "profiles"),
-        maxCount: 1,
-        fileName(req, file) {
-          return `${req.params.userId}.${file.mimetype.split("/")[1]}`;
-        },
-        fieldName: "picture",
-        fileFilter(file) {
-          return ["jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
-        },
-      }),
-    (req, res, next) => res.status(200).json({})
-  )
   .put(
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
