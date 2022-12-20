@@ -28,7 +28,7 @@ router
 
 router
   .route("/:userId/picture")
-  .get(authController.verifyUserAndPassAsResponseLocal, (req, res, next) =>
+  .get((req, res, next) =>
     sendFileStream(
       res,
       path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
@@ -115,7 +115,7 @@ router
         next,
         path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
       ),
-    (req, res, next) => res.status(200).json({})
+    (req, res, next) => res.status(200).json({acknowledged: true, deleteCount: 1})
   );
 
 export default router;
