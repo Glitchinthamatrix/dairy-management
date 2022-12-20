@@ -37,10 +37,12 @@ router
   .post(
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
-    (req, res, next) => verifyFileAbsence(res, `${req.params.userId}.jpeg`),
-    (req, res, next) => {
+    async (req, res, next) => {
       if (
-        !doesFileExist(path.join(process.cwd(), "uploads", "profiles"), `${req.params.userId}`)
+        !(await doesFileExist(
+          path.join(process.cwd(), "uploads", "profiles"),
+          `${req.params.userId}.jpeg`
+        ))
       ) {
         next();
       } else {
@@ -61,7 +63,8 @@ router
         fileFilter(file) {
           return ["jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
         },
-      })
+      }),
+    (req, res, next) => res.status(200).json({})
   )
   .put(
     authController.verifyUserAndPassAsResponseLocal,
@@ -87,14 +90,18 @@ router
         fileFilter(file) {
           return ["jpeg"].indexOf(file.mimetype.split("/")[1]) !== -1;
         },
-      })
+      }),
+    (req, res, next) => res.status(200).json({})
   )
   .delete(
     authController.verifyUserAndPassAsResponseLocal,
     (req, res, next) => verifyParamAssociationToUser(req, res, next, { userId: "id" }),
-    (req, res, next) => {
+    async (req, res, next) => {
       if (
-        !doesFileExist(path.join(process.cwd(), "uploads", "profiles"), `${req.params.userId}`)
+        await doesFileExist(
+          path.join(process.cwd(), "uploads", "profiles"),
+          `${req.params.userId}.jpeg`
+        )
       ) {
         next();
       } else {
@@ -107,7 +114,8 @@ router
         res,
         next,
         path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
-      )
+      ),
+    (req, res, next) => res.status(200).json({})
   );
 
 export default router;
