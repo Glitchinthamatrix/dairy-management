@@ -83,6 +83,7 @@ async function sessionCreationMiddleware(req, res) {
       isASeller: user.isASeller,
       cart: user.cart,
       wishlist: user.wishlist,
+      picture: user.picture,
     });
     res.status(200).json({ authToken: token });
   } catch (e) {
