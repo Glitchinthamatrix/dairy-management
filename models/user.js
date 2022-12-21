@@ -13,6 +13,7 @@ const userSchema = new Schema({
   shippingAddress: { type: String },
   cart: { type: Schema.Types.ObjectId, ref: "Cart" },
   wishlist: { type: Schema.Types.ObjectId },
+  orders: { type: [Schema.Types.ObjectId], ref: "Order" },
   isAnAdmin: { type: Boolean, default: false },
   affiliateBrands: { type: [Schema.Types.ObjectId], ref: "Brand" },
   sellerProducts: { type: [Schema.Types.ObjectId], ref: "Product" },
