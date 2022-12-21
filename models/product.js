@@ -9,12 +9,16 @@ const productSchema = new Schema({
   category: {
     type: Schema.Types.ObjectId,
     ref: "Category",
-    default: null
+    default: null,
   },
   unitsAvailable: { type: Number, default: Number.MAX_SAFE_INTEGER },
   images: { type: [String] },
   reviews: { type: [Schema.Types.ObjectId], ref: "Review" },
-  addedBy: { type: Schema.Types.ObjectId, ref: "User", required: [true, "Seller is required"] },
+  addedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Seller is required"],
+  },
 });
 
 const model = mongoose.model("Product", productSchema);
