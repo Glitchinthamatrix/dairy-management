@@ -101,7 +101,7 @@ export const schemaEnforcer = async ({
 
       // Check for wrong types
       if (!TYPE_VALIDATORS[modelProperties[prop].type](req.body[prop])) {
-        errors[prop] = `Invalid value , ${capitalize(prop)} must be a ${
+        errors[prop] = `Invalid value, ${capitalize(prop)} must be a ${
           HUMAN_TYPE_NAMES[modelProperties[prop].type]
         }`;
         return;
