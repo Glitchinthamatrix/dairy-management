@@ -2,10 +2,13 @@ import express from "express";
 const router = express.Router();
 import controllers from "../controllers/_controllers.js";
 import schemaEnforcers from "../schema-enforcers/_schema-enforcers.js";
-const { orderController } = controllers;
+const { authController, orderController } = controllers;
 const { orderSchemaEnforcer } = schemaEnforcers;
 
-router.route("/").get(orderController.getOrders);
+router
+  .route("/")
+  .get(orderController.getOrders)
+  .post(authController.verifyUserAndPassAsResponseLocal, orderSchemaEnforcer, orderController.addOrder);
 
 router
   .route("/:orderId")
