@@ -7,7 +7,7 @@ const { orderSchemaEnforcer } = schemaEnforcers;
 
 router
   .route("/")
-  .get(orderController.getOrders)
+  .get(authController.verifyUserAndPassAsResponseLocal, orderController.getOrders)
   .post(authController.verifyUserAndPassAsResponseLocal, orderSchemaEnforcer, orderController.addOrder);
 
 router
