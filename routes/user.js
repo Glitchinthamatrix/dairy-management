@@ -12,7 +12,7 @@ const { userSchemaEnforcer } = schemaEnforcers;
 
 router
   .route("/")
-  .get(userController.getUsers)
+  .get(authController.verifyUserAndPassAsResponseLocal, authController.verifyAdminFromResponseLocals, userController.getUsers)
   .post(userSchemaEnforcer, userController.addUser);
 
 // Do not move /me route down, it will be called inside /:id route with 'me' as id
@@ -24,7 +24,7 @@ router
   .route("/:userId")
   .get(userController.getUser)
   .put(userSchemaEnforcer, userController.updateUser)
-  .delete(userController.removeUser);
+  .delete(authController.verifyUserAndPassAsResponseLocal, authController.verifyAdminFromResponseLocals, userController.removeUser);
 
 router
   .route("/:userId/picture")

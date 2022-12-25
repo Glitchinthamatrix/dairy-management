@@ -3,9 +3,11 @@ import { generalizeMongooseDocument } from "../libs/mongoose.js";
 import models from "../models/_models.js";
 const { Cart, User, Wishlist } = models;
 
-async function getUsers(req, res) {
+async function getUsers(req, res, next) {
   try {
-    const users = await User.find();
+    const sellers = await User.find({isASeller: true});
+    const customers = await User.find({isASeller: false, isAnAdmin: false});
+    const users = sellers.concat(customers);
     res.status(200).json(generalizeMongooseDocument(users));
   } catch (e) {
     res.status(500).json({});
