@@ -10,6 +10,7 @@ const orderSchema = new Schema({
   buyer: { type: Schema.Types.ObjectId, ref: "User", required: ["User is required"] },
   seller: { type: Schema.Types.ObjectId, ref: "User", required: [true, "Seller is required"] },
   isDelivered: { type: Boolean, default: false },
+  isCancelled: { type: Boolean, default: false },
   transaction: { type: Schema.Types.ObjectId, ref: "Transaction", default: null },
   orderDate: { type: Date, required: [true, "Order date is requred"] },
   deliveryDate: { type: Date, required: [true, "Delivery date is required"] },
