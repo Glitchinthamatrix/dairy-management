@@ -5,10 +5,9 @@ const { Product, Order, User } = models;
 async function getOrders(req, res, next) {
   try {
     let orders = [];
-    if(res.locals.user.isAnAdmin){
+    if (res.locals.user.isAnAdmin) {
       orders = await Order.find();
-    }
-    else if (res.locals.user.isASeller) {
+    } else if (res.locals.user.isASeller) {
       orders = await Order.find({ seller: res.locals.user.id }).populate(["product", "buyer"]);
     } else {
       orders = await Order.find({ buyer: res.locals.user.id }).populate(["product"]);
