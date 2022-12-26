@@ -164,7 +164,7 @@ async function removeProductImage(req, res, next) {
       { $set: { images: updatedImages } },
       { new: true }
     );
-    res.status(200).json(generalizeMongooseDocument(updated));
+    res.status(200).json({acknowledged: true, deleteCount: 1});
   } catch (e) {
     if (e.code === ERROR_CODE_FILE_NOT_FOUND) {
       res.status(404).json({});
