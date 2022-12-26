@@ -15,4 +15,7 @@ router
   .get(orderController.getOrder)
   .put(orderSchemaEnforcer, orderController.updateOrder);
 
+router.route("/:orderId/cancel")
+.put(authController.verifyUserAndPassAsResponseLocal, orderController.cancelOrder)
+
 export default router;

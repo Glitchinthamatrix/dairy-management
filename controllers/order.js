@@ -66,4 +66,23 @@ async function updateOrder(req, res) {
   }
 }
 
-export default { getOrders, addOrder, getOrder, updateOrder };
+async function cancelOrder(req, res, next) {
+  try{
+    const orderId = req.params.orderId;
+    const order = await Order.findOne({_id: orderId})
+    if(order.buyer.toString() !== res.locals.user.id && !res.locals.user.isAnAdmin){
+      res.status(401).json({});
+      return;
+    }else if(order.isCancelled){
+      res.status(400).json({});
+      return;
+    }
+    order.isCancelled = true;
+    const updated = await order.save();
+    res.status(200).json(generalizeMongooseDocument(updated));
+  }catch(e){
+    res.status(500).json({});
+  }
+}
+
+export default { getOrders, addOrder, getOrder, updateOrder, cancelOrder };
