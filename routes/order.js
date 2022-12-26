@@ -8,14 +8,19 @@ const { orderSchemaEnforcer } = schemaEnforcers;
 router
   .route("/")
   .get(authController.verifyUserAndPassAsResponseLocal, orderController.getOrders)
-  .post(authController.verifyUserAndPassAsResponseLocal, orderSchemaEnforcer, orderController.addOrder);
+  .post(
+    authController.verifyUserAndPassAsResponseLocal,
+    orderSchemaEnforcer,
+    orderController.addOrder
+  );
 
 router
   .route("/:orderId")
   .get(orderController.getOrder)
   .put(orderSchemaEnforcer, orderController.updateOrder);
 
-router.route("/:orderId/cancel")
-.put(authController.verifyUserAndPassAsResponseLocal, orderController.cancelOrder)
+router
+  .route("/:orderId/cancel")
+  .put(authController.verifyUserAndPassAsResponseLocal, orderController.cancelOrder);
 
 export default router;
