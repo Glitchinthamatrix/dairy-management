@@ -6,30 +6,25 @@ import sessionController from "./session.js";
 const { Cart, User, Wishlist } = models;
 
 async function signUp(req, res) {
-  const user = new User();
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.password = req.body.password;
-  if (!req.body.isASeller) {
-    user.shippingAddress = req.body.shippingAddress;
-  }
-  user.isASeller = req.body.isASeller;
-  user.isACustomer = !req.body.isASeller;
-
-  user
-    .save()
-    .then(async (user) => {
-      const wishlist = await Wishlist.create({ user: user._id });
-      const cart = await Cart.create({ user: user._id });
-      user.wishlist = wishlist._id;
+  try{
+    const { name, email, password, shippingAddress, isASeller} = req.body;
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    user.isASeller = isASeller;
+    if(!isASeller){
+      user.shippingAddress = shippingAddress;
+      const cart = await Cart.create({user: user._id});
+      const wishlist = await Wishlist.create({user: user._id});
       user.cart = cart._id;
-      user.save().then((user) => {
-        res.status(200).json(generalizeMongooseDocument(user));
-      });
-    })
-    .catch((e) => {
-      res.status(500).json({});
-    });
+      user.wishlist = wishlist._id;
+      user = await user.save();
+    }
+    res.status(200).json(generalizeMongooseDocument(user));
+  }catch(e){
+    res.status(500).json({});
+  }
 }
 
 async function getUser(req, res, next) {
