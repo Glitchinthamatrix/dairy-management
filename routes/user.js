@@ -13,7 +13,7 @@ const { userSchemaEnforcer } = schemaEnforcers;
 router
   .route("/")
   .get(authController.verifyUserAndPassAsResponseLocal, authController.verifyAdminFromResponseLocals, userController.getUsers)
-  .post(userSchemaEnforcer, userController.addUser);
+  // .post(userSchemaEnforcer, userController.addUser);
 
 // Do not move /me route down, it will be called inside /:id route with 'me' as id
 router
