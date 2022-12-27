@@ -44,6 +44,10 @@ router.route("/:productId/images").post(
 );
 
 router
+  .route("/search")
+  .get(authController.verifyUserAndPassAsResponseLocal, productController.searchProducts);
+
+router
   .route("/:productId")
   .get(authController.verifyUserAndPassAsResponseLocal, productController.getProduct)
   .put(

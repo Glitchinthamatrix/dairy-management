@@ -192,6 +192,19 @@ async function addReview(req, res, next) {
   }
 }
 
+async function searchProducts(req, res, next) {
+  try {
+    const { title } = req.query;
+    const products = await Product.find({ title: { $regex: title, $options: "i" } }).populate([
+      "category",
+      "brand",
+    ]);
+    res.status(200).json(generalizeMongooseDocument(products));
+  } catch (e) {
+    res.status(500).json({});
+  }
+}
+
 export default {
   getProducts,
   addProduct,
@@ -202,4 +215,5 @@ export default {
   addImageAddressToProduct,
   removeProductImage,
   addReview,
+  searchProducts,
 };
