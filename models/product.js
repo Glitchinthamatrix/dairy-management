@@ -19,6 +19,8 @@ const productSchema = new Schema({
     ref: "User",
     required: [true, "Seller is required"],
   },
+  orderCount: { type: Number, default: 0 },
+  dateAdded: { type: Date, required: true },
 });
 
 const model = mongoose.model("Product", productSchema);
