@@ -6,23 +6,24 @@ import sessionController from "./session.js";
 const { Cart, User, Wishlist } = models;
 
 async function signUp(req, res) {
-  try{
-    const { name, email, password, shippingAddress, isASeller} = req.body;
-    const user = new User();
+  try {
+    const { name, email, password, shippingAddress, isASeller } = req.body;
+    let user = new User();
     user.name = name;
     user.email = email;
     user.password = password;
     user.isASeller = isASeller;
-    if(!isASeller){
+    if (!isASeller) {
       user.shippingAddress = shippingAddress;
-      const cart = await Cart.create({user: user._id});
-      const wishlist = await Wishlist.create({user: user._id});
+      const cart = await Cart.create({ user: user._id });
+      const wishlist = await Wishlist.create({ user: user._id });
       user.cart = cart._id;
       user.wishlist = wishlist._id;
-      user = await user.save();
     }
+    user = await user.save();
     res.status(200).json(generalizeMongooseDocument(user));
-  }catch(e){
+  } catch (e) {
+    console.log(e);
     res.status(500).json({});
   }
 }
