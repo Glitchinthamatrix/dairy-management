@@ -78,10 +78,7 @@ connection.on("error", (e) => {
   console.log("MongoDB connection error: ", e.message);
 });
 
-app.listen(PORT, (err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(`Server listening on port ${PORT}`);
-  }
-});
+app.listen(PORT, (e) => {
+  const message = e ? e.message : `Server listening on port  ${PORT}`;
+  console.log(message);
+})
