@@ -40,7 +40,11 @@ async function getProducts(req, res) {
 
 async function addProduct(req, res) {
   try {
-    const product = await Product.create({ ...req.body, addedBy: res.locals.user.id, dateAdded: new Date() });
+    const product = await Product.create({
+      ...req.body,
+      addedBy: res.locals.user.id,
+      dateAdded: new Date(),
+    });
     res.status(200).json(generalizeMongooseDocument(product));
   } catch (e) {
     res.status(500).json({});
@@ -194,11 +198,15 @@ async function addReview(req, res, next) {
 
 async function searchProducts(req, res, next) {
   try {
-    const { title } = req.query;
-    const products = await Product.find({ title: { $regex: title, $options: "i" } }).populate([
-      "category",
-      "brand",
-    ]);
+    const { title, category } = req.query;
+    const searchParams = {};
+    if (title) {
+      searchParams.title = { $regex: title, $options: "i" };
+    }
+    if (category) {
+      searchParams.category = category;
+    }
+    const products = await Product.find(searchParams).populate(["category", "brand"]);
     res.status(200).json(generalizeMongooseDocument(products));
   } catch (e) {
     res.status(500).json({});
