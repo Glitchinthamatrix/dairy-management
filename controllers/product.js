@@ -40,7 +40,7 @@ async function getProducts(req, res) {
 
 async function addProduct(req, res) {
   try {
-    const product = await Product.create({ ...req.body, addedBy: res.locals.user.id });
+    const product = await Product.create({ ...req.body, addedBy: res.locals.user.id, dateAdded: new Date() });
     res.status(200).json(generalizeMongooseDocument(product));
   } catch (e) {
     res.status(500).json({});
