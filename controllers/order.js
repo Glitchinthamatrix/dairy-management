@@ -34,8 +34,10 @@ async function addOrder(req, res, next) {
       orderDate: new Date(),
       deliveryDate: deliveryDate,
     });
+    orderedProduct.orderCount = orderedProduct.orderCount + 1;
     buyer.orders.push(order._id);
     seller.orders.push(order._id);
+    await orderedProduct.save();
     await buyer.save();
     await seller.save();
     res.status(200).json(generalizeMongooseDocument(order));
