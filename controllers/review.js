@@ -6,7 +6,7 @@ const { Review } = models;
 const mapReviewAuthorValues = {
   id: "id",
   name: "name",
-}
+};
 
 async function getReview(req, res) {
   try {
@@ -21,7 +21,7 @@ async function updateReview(req, res) {
   try {
     let updated = await Review.findOneAndUpdate(
       { _id: req.params.reviewId },
-      { $set: {comment: req.body.comment} },
+      { $set: { comment: req.body.comment } },
       { new: true }
     ).populate(["author"]);
     updated = generalizeMongooseDocument(updated);

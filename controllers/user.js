@@ -5,8 +5,8 @@ const { Cart, User, Wishlist } = models;
 
 async function getUsers(req, res, next) {
   try {
-    const sellers = await User.find({isASeller: true});
-    const customers = await User.find({isASeller: false, isAnAdmin: false});
+    const sellers = await User.find({ isASeller: true });
+    const customers = await User.find({ isASeller: false, isAnAdmin: false });
     const users = sellers.concat(customers);
     res.status(200).json(generalizeMongooseDocument(users));
   } catch (e) {

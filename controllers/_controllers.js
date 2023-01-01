@@ -11,4 +11,17 @@ import transactionController from "./transaction.js";
 import userController from "./user.js";
 import wishlistController from "./wishlist.js";
 
-export default { assetController, authController, brandController, cartController, categoryController, orderController, productController, reviewController, sessionController, transactionController, userController, wishlistController};
+export default {
+  assetController,
+  authController,
+  brandController,
+  cartController,
+  categoryController,
+  orderController,
+  productController,
+  reviewController,
+  sessionController,
+  transactionController,
+  userController,
+  wishlistController,
+};
