@@ -1,7 +1,9 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import { nullifyFalsyValues } from "./utils/object.js";
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 9000;
 
@@ -65,7 +67,7 @@ app.use("/users", userRouter);
 app.use("/wishlists", wishlistRouter);
 
 mongoose.connect(
-  `mongodb+srv://nitesh:mayday9501@cluster0.ouqxf.mongodb.net/?retryWrites=true&w=majority`
+  `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@cluster0.ouqxf.mongodb.net/?retryWrites=true&w=majority`
 );
 
 const connection = mongoose.connection;
