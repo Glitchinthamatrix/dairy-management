@@ -9,7 +9,16 @@ import { validateProductReviewRequestBody } from "../utils/request.js";
 router
   .route("/:reviewId")
   .get(reviewController.getReview)
-  .put(authController.verifyUserAndPassAsResponseLocal, authController.verifyCustomerFromResponseLocals, validateProductReviewRequestBody, reviewController.updateReview)
-  .delete(authController.verifyUserAndPassAsResponseLocal, authController.verifyCustomerFromResponseLocals, reviewController.removeReview);
+  .put(
+    authController.verifyUserAndPassAsResponseLocal,
+    authController.verifyCustomerFromResponseLocals,
+    validateProductReviewRequestBody,
+    reviewController.updateReview
+  )
+  .delete(
+    authController.verifyUserAndPassAsResponseLocal,
+    authController.verifyCustomerFromResponseLocals,
+    reviewController.removeReview
+  );
 
 export default router;

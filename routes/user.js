@@ -12,8 +12,12 @@ const { userSchemaEnforcer } = schemaEnforcers;
 
 router
   .route("/")
-  .get(authController.verifyUserAndPassAsResponseLocal, authController.verifyAdminFromResponseLocals, userController.getUsers)
-  // .post(userSchemaEnforcer, userController.addUser);
+  .get(
+    authController.verifyUserAndPassAsResponseLocal,
+    authController.verifyAdminFromResponseLocals,
+    userController.getUsers
+  );
+// .post(userSchemaEnforcer, userController.addUser);
 
 // Do not move /me route down, it will be called inside /:id route with 'me' as id
 router
@@ -24,7 +28,11 @@ router
   .route("/:userId")
   .get(userController.getUser)
   .put(userSchemaEnforcer, userController.updateUser)
-  .delete(authController.verifyUserAndPassAsResponseLocal, authController.verifyAdminFromResponseLocals, userController.removeUser);
+  .delete(
+    authController.verifyUserAndPassAsResponseLocal,
+    authController.verifyAdminFromResponseLocals,
+    userController.removeUser
+  );
 
 router
   .route("/:userId/picture")
@@ -76,7 +84,7 @@ router
         next,
         path.join(process.cwd(), "uploads", "profiles", `${req.params.userId}.jpeg`)
       ),
-    (req, res, next) => res.status(200).json({acknowledged: true, deleteCount: 1})
+    (req, res, next) => res.status(200).json({ acknowledged: true, deleteCount: 1 })
   );
 
 export default router;
