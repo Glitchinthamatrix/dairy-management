@@ -3,28 +3,30 @@ import models from "../models/_models.js";
 const { Wishlist } = models;
 
 async function getWishlists(req, res) {
-  try{
+  try {
     const wishlists = await Wishlist.find();
     res.status(200).json(generalizeMongooseDocument(wishlists));
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
 
 async function addWishlist(req, res) {
-  try{
+  try {
     const wishlist = await Wishlist.create(req.body);
     res.status(200).json(generalizeMongooseDocument(wishlist));
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
 
 async function getWishlist(req, res) {
-  try{
-    const wishlist = await Wishlist.findOne({_id: req.params.wishlistId}).populate(["products"]);
+  try {
+    const wishlist = await Wishlist.findOne({ _id: req.params.wishlistId }).populate([
+      "products",
+    ]);
     res.status(200).json(generalizeMongooseDocument(wishlist));
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
@@ -32,14 +34,14 @@ async function getWishlist(req, res) {
 async function addProductToWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
-    const wishlist = await Wishlist.findOne({_id: wishlistId});
-    if(wishlist.user.toString() !== res.locals.user.id){
+    const wishlist = await Wishlist.findOne({ _id: wishlistId });
+    if (wishlist.user.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;
     }
     const updated = await Wishlist.findOneAndUpdate(
       { _id: wishlistId },
-      { $set: {products: [...wishlist.products, req.body.product]} },
+      { $set: { products: [...wishlist.products, req.body.product] } },
       { new: true }
     );
     res.status(200).json(generalizeMongooseDocument(updated));
@@ -52,15 +54,17 @@ async function addProductToWishlist(req, res, next) {
 async function removeProductFromWishlist(req, res, next) {
   try {
     const wishlistId = req.params.wishlistId;
-    const wishlist = await Wishlist.findOne({_id: wishlistId});
-    if(wishlist.user.toString() !== res.locals.user.id){
+    const wishlist = await Wishlist.findOne({ _id: wishlistId });
+    if (wishlist.user.toString() !== res.locals.user.id) {
       res.status(401).json({});
       return;
     }
-    const products = wishlist.products.filter((product) => product.toString() !== req.body.product);
+    const products = wishlist.products.filter(
+      (product) => product.toString() !== req.body.product
+    );
     const updated = await Wishlist.findOneAndUpdate(
       { _id: wishlistId },
-      { $set: {products: products} },
+      { $set: { products: products } },
       { new: true }
     );
     res.status(200).json(generalizeMongooseDocument(updated));
@@ -70,12 +74,19 @@ async function removeProductFromWishlist(req, res, next) {
 }
 
 async function removeWishlist(req, res) {
-  try{
-    const result = await Wishlist.deleteOne({_id: req.params.wishlistId});
+  try {
+    const result = await Wishlist.deleteOne({ _id: req.params.wishlistId });
     res.status(200).json(result);
-  }catch(e){
+  } catch (e) {
     res.status(500).json({});
   }
 }
 
-export default { getWishlists, addWishlist, getWishlist, addProductToWishlist, removeProductFromWishlist, removeWishlist };
+export default {
+  getWishlists,
+  addWishlist,
+  getWishlist,
+  addProductToWishlist,
+  removeProductFromWishlist,
+  removeWishlist,
+};
